@@ -1,0 +1,18 @@
+{
+  "name": "sorted-tests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node ./code/dist/main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "chalk": "^5.6.0",
+    "typescript": "^5.9.2"
+  }
+}
