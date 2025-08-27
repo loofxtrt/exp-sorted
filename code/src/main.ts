@@ -75,11 +75,7 @@ function generateLocalYoutubePlaylistJson(outputDir: string, id: string, title: 
         'description': description,
         'videos': cleanUrls
     }
-    const plDataString = JSON.stringify(
-        plDataObject,
-        null,
-        4
-    );
+    const plDataString = JSON.stringify(plDataObject, null, 4);
 
     // escrever o arquivo final
     const savePath = path.join(outputDir, `youtube.playlist.local.${id}.json`);
