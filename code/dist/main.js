@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import logger from './logger.js';
+import './data.js'; // roda a função que carrega as configs assim que é importado
 function extractVideoIdFromUrl(videoUrl) {
     // esse regex obtém tudo que vem depois de 'v=' mas para de obter caracteres se encontrar um '&' ou se chegar ao fim da string
     // o que resta disso é o id do vídeo, que geralmente fica depois de watch?v=
@@ -83,12 +84,25 @@ function addVideoToExistingLocalYoutubePlaylist(allYoutubePlaylistsDir, localPla
     fs.writeFileSync(plPath, JSON.stringify(plDataObject, null, 4), 'utf-8');
     logger.success('Added video ID to playlist', videoId);
 }
-generateLocalYoutubePlaylistJson('./output', generateRandomId(32), 'Lorem Ipsum', 'Hello, World!', [
-    'https://www.youtube.com/watch?v=1JOnihp4tHI',
-    'https://www.youtube.com/watch?v=SmUloGNpFGY',
-    'https://www.youtube.com/watch?v=yiWQ2E9MWm8&t=7371s',
-    'https://www.youtube.com/watch?v=SmUloGNpFGY&list=PLqIOCEYgBP5Gej7nFzDknWFEdruxnXkqS&index=10'
-]);
-addVideoToExistingLocalYoutubePlaylist('/mnt/seagate/workspace/coding/sandbox/sorted-tests/output', 'LOCbYSy1Uc5E8WRSQAThfbS1NAf3FGgdGr4', 'https://www.youtube.com/watch?v=w30zWauuoGw');
+/*
+generateLocalYoutubePlaylistJson(
+    './output',
+    generateRandomId(32),
+    'Lorem Ipsum',
+    'Hello, World!',
+    [
+        'https://www.youtube.com/watch?v=1JOnihp4tHI',
+        'https://www.youtube.com/watch?v=SmUloGNpFGY',
+        'https://www.youtube.com/watch?v=yiWQ2E9MWm8&t=7371s',
+        'https://www.youtube.com/watch?v=SmUloGNpFGY&list=PLqIOCEYgBP5Gej7nFzDknWFEdruxnXkqS&index=10'
+    ]
+);
+
+addVideoToExistingLocalYoutubePlaylist(
+    '/mnt/seagate/workspace/coding/experimental/exp-sorted/output',
+    'LOCbYSy1Uc5E8WRSQAThfbS1NAf3FGgdGr4',
+    'https://www.youtube.com/watch?v=w30zWauuoGw'
+);
+*/
 //console.log(generateRandomId(32));
 //# sourceMappingURL=main.js.map

@@ -3,7 +3,7 @@ import chalk from 'chalk';
 function baseLog(level: string, msg: any, details: any | null) {
     try {
         msg = msg.toString();
-        details = details.toString();
+        details = details?.toString() ?? ''; // retornar uma string vazia caso seja null ou undefined
     } catch (err) {
         console.error(err);
     }

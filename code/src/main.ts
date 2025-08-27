@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import logger from './logger.js';
+import './data.js'; // roda a função que carrega as configs assim que é importado
 
 function extractVideoIdFromUrl(videoUrl: string): string | null {
     // esse regex obtém tudo que vem depois de 'v=' mas para de obter caracteres se encontrar um '&' ou se chegar ao fim da string
@@ -104,6 +105,7 @@ function addVideoToExistingLocalYoutubePlaylist(allYoutubePlaylistsDir: string, 
     logger.success('Added video ID to playlist', videoId);
 }
 
+/*
 generateLocalYoutubePlaylistJson(
     './output',
     generateRandomId(32),
@@ -122,5 +124,6 @@ addVideoToExistingLocalYoutubePlaylist(
     'LOCbYSy1Uc5E8WRSQAThfbS1NAf3FGgdGr4',
     'https://www.youtube.com/watch?v=w30zWauuoGw'
 );
+*/
 
 //console.log(generateRandomId(32));
