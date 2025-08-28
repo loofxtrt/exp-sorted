@@ -13,25 +13,38 @@ interface ConfigsInterface {
 }
 
 function getConfigs(configFilePath: string) {
-    logger.info('Loading configs');
+    logger.info({ msg: 'Loading configs' });
 
     try {
+        // ler o arquivo
         const file = fs.readFileSync(configFilePath, 'utf-8');
         const dataObject = yaml.load(file) as ConfigsInterface;
 
+        // obter seus valores hardcodeds (tipo o diretório root)
+        // e montar os relativos (tipo ytroot/@playlists)
         dirYoutubeRoot = dataObject['youtube-directory'];
         dirYoutubePlaylists = path.join(dirYoutubeRoot, '@playlists');
 
         logger.success(
-            'Successfully loaded configs',
-            [
-                `youtube root: ${dirYoutubeRoot}`,
-                `youtube playlists: ${dirYoutubePlaylists}`
-            ]
+            {
+                msg: 'Successfully loaded configs',
+                details: [
+                    `youtube root: ${dirYoutubeRoot}`,
+                    `youtube playlists: ${dirYoutubePlaylists}`
+                ]
+            }
         );
     } catch (err) {
-        logger.error('Error while loading configs');
         console.error(err);
+    }
+}
+
+export const getNameFor = {
+    youtubeLocalPlaylist(playlistId: string) {
+        return `youtube.playlist.local.${playlistId}.json`
+    },
+    youtubeServicePlaylist(playlistId: string) {
+        return `youtube.playlist.service.${playlistId}.json`
     }
 }
 

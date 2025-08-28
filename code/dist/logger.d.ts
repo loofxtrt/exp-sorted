@@ -1,7 +1,13 @@
-declare function success(msg: string, details?: string | string[] | null): void;
-declare function error(msg: string, details?: string | string[] | null): void;
-declare function info(msg: string, details?: string | string[] | null): void;
-declare function warn(msg: string, details?: string | string[] | null): void;
+type logOptions = {
+    level?: 'success' | 'error' | 'info' | 'warn' | 'text';
+    prefix?: string | undefined | null;
+    msg: string;
+    details?: string | string[] | undefined | null;
+};
+declare function success({ prefix, msg, details }: logOptions): void;
+declare function error({ prefix, msg, details }: logOptions): void;
+declare function info({ prefix, msg, details }: logOptions): void;
+declare function warn({ prefix, msg, details }: logOptions): void;
 declare const _default: {
     success: typeof success;
     error: typeof error;

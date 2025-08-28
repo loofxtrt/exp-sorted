@@ -1,11 +1,22 @@
 import chalk from 'chalk';
 
-function baseLog(level: string, msg: string, details: string | string[] | null) {
+type logOptions = {
+    // parâmetros opcionais aqui não recebem ? + | undefined + | null
+    // isso pq só o undefined não faz deles opcionais
+    // o ? é necessário pra que se possa chamar as subfunções sem precisar passar os outros
+    level?: 'success' | 'error' | 'info' | 'warn' | 'text',
+    prefix?: string | undefined | null,
+    msg: string,
+    details?: string | string[] | undefined | null
+}
+
+function baseLog({ level = 'text', prefix = undefined, msg, details = undefined }: logOptions) {
     /**
      * imprime mensagens de log no terminal
      * todos os argumentos DESSA função são passados pelas outras subfunções de log
      * 
-     * @param level - define o identificador que vai aparecer na frente do conteúdo
+     * @param level - define o indicador que vai aparecer na frente do conteúdo
+     * @param prefix - indicador opcional que aparece depois do level e antes da mensagem
      * @param msg - mensagem principal do log
      * @param details - detalhes adicionais e opcionais sobre o log
      *     podem ser passados como uma string única ou como um array
@@ -45,7 +56,7 @@ function baseLog(level: string, msg: string, details: string | string[] | null) 
     shortLevel = color(shortLevel);
 
     // tratar os details
-    let newDetails: string | null = null;
+    let newDetails: string | undefined | null = null;
     
     if (Array.isArray(details)) {
         newDetails = '';
@@ -71,27 +82,61 @@ function baseLog(level: string, msg: string, details: string | string[] | null) 
     }
 
     // formatar a mensagem com ou sem os details, caso eles estejam presentes
-    const finalMsg = newDetails != null ? `${msg}: ${newDetails}` : `${msg}` 
+    let finalMsg: string = '';
+
+    if (typeof prefix == 'string' && prefix?.toString().trim() != '') {
+        finalMsg += `${prefix} ~ `;
+    }
+
+    finalMsg += msg;
+
+    if (details != null) {
+        finalMsg += `: ${details}`;
+    }
     
     console.log(
         `[ ${ shortLevel } ] ${finalMsg}`
     );
 }
 
-function success(msg: string, details: string | string[] | null = null) {
-    baseLog('success', msg, details);
+function success({ prefix, msg, details }: logOptions) {
+    baseLog(
+        {
+            level: 'success',
+            prefix: prefix,
+            msg: msg,
+            details: details
+    });
 }
 
-function error(msg: string, details: string | string[] | null = null) {
-    baseLog('error', msg, details);
+function error({ prefix, msg, details }: logOptions) {
+    baseLog(
+        {
+            level: 'error',
+            prefix: prefix,
+            msg: msg,
+            details: details
+    });
 }
 
-function info(msg: string, details: string | string[] | null = null) {
-    baseLog('info', msg, details);
+function info({ prefix, msg, details }: logOptions) {
+    baseLog(
+        {
+            level: 'info',
+            prefix: prefix,
+            msg: msg,
+            details: details
+    });
 }
 
-function warn(msg: string, details: string | string[] | null = null) {
-    baseLog('warn', msg, details);
+function warn({ prefix, msg, details }: logOptions) {
+    baseLog(
+        {
+            level: 'warn',
+            prefix: prefix,
+            msg: msg,
+            details: details
+    });
 }
 
 export default {

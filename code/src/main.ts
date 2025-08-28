@@ -3,6 +3,7 @@ import path from 'path';
 
 import logger from './logger.js';
 import './data.js'; // roda a função que carrega as configs assim que é importado
+import { dirYoutubePlaylists, getNameFor } from './data.js';
 
 function extractVideoIdFromUrl(videoUrl: string): string | null {
     // esse regex obtém tudo que vem depois de 'v=' mas para de obter caracteres se encontrar um '&' ou se chegar ao fim da string
@@ -16,14 +17,14 @@ function extractVideoIdFromUrl(videoUrl: string): string | null {
         const videoId = match[1];
 
         if (videoId) {
-            logger.success(`Successfully extracted video ID`, videoId);
+            logger.success({ msg: `Successfully extracted video ID`, details: videoId });
             return videoId;
         } else {
-            logger.error('Matches were found but something went wrong while extracing video ID');
+            logger.error({ msg: 'Matches were found but something went wrong while extracing video ID' });
             return null;
         }
     } else {
-        logger.error('Error while extracting video ID', 'no matches');
+        logger.error({ msg: 'Error while extracting video ID', details: 'no matches' });
         return null;
     }
 }
@@ -79,14 +80,16 @@ function generateLocalYoutubePlaylistJson(outputDir: string, id: string, title: 
     const plDataString = JSON.stringify(plDataObject, null, 4);
 
     // escrever o arquivo final
-    const savePath = path.join(outputDir, `youtube.playlist.local.${id}.json`);
+    const savePath = path.join(
+        outputDir,
+        getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
+    );
     fs.writeFileSync(savePath, plDataString, 'utf-8');
 }
 
-function addVideoToExistingLocalYoutubePlaylist(allYoutubePlaylistsDir: string, localPlaylistId: string, videoUrl: string) {
+function addVideoToExistingLocalYoutubePlaylist(youtubePlaylistsDir: string, localPlayListId: string, videoUrl: string) {
     const videoId = extractVideoIdFromUrl(videoUrl);
-    
-    const plPath = path.join(allYoutubePlaylistsDir, `youtube.playlist.local.${localPlaylistId}.json`);
+    const plPath = path.join(youtubePlaylistsDir, getNameFor.youtubeLocalPlaylist(localPlayListId));
     
     // ler o arquivo passado e converter os dados de string pra objeto
     const plDataString = fs.readFileSync(plPath, 'utf-8');
@@ -94,7 +97,7 @@ function addVideoToExistingLocalYoutubePlaylist(allYoutubePlaylistsDir: string, 
 
     // ignorar a requisição de adição caso o vídeo já esteja na playlist
     if (plDataObject.videos.includes(videoId)) {
-        logger.info('Ignored video inclusion on playlist', 'video already exists');
+        logger.info({ msg: 'Ignored video inclusion on playlist', details: 'video already exists' });
         return;
     }
 
@@ -102,12 +105,47 @@ function addVideoToExistingLocalYoutubePlaylist(allYoutubePlaylistsDir: string, 
     plDataObject.videos.push(videoId);
     fs.writeFileSync(plPath, JSON.stringify(plDataObject, null, 4), 'utf-8');
 
-    logger.success('Added video ID to playlist', videoId);
+    logger.success({ prefix: videoId, msg: 'Added video ID to playlist' });
 }
 
-/*
+function getPlaylistPathFromId(youtubePlaylistsDir: string, playlistId: string): string | null {     
+    // primeiro, tentar obter o arquivo da playlist apenas pelo nome
+    // isso pode falhar caso o usuário tenha mudado manualmente o nome do arquivo ou caso ele só não exista
+    let plPath = path.join(youtubePlaylistsDir, getNameFor.youtubeLocalPlaylist(playlistId));
+    
+    if (fs.existsSync(plPath)) {
+        logger.success({ prefix: playlistId, msg: `Found playlist ID in the name of file` });
+        return plPath;
+    } else {
+        // se não achar pelo nome, tenta ler todas as playlists disponíveis
+        // e procurar pelo id dentro do conteúdo dos arquivos
+
+        // ler o diretório listando todos os arquivos com seus devidos tipos
+        const allPlaylistFiles = fs.readdirSync(youtubePlaylistsDir, { withFileTypes: true});
+
+        allPlaylistFiles.forEach(plFile => {
+            if (!plFile.isFile()) return;
+
+            // converter o dirent pra um path completo e o conteúdo de texto pra um obj javascript
+            const plPath = path.join(youtubePlaylistsDir, plFile.name);
+
+            const plData = fs.readFileSync(plPath, 'utf-8');
+            const plObject = JSON.parse(plData);
+
+            // verificar se o id que está sendo procurado tá no conteúdo
+            if (plObject['id'] === playlistId) {
+                logger.success({ prefix: playlistId, msg: `Found playlist ID inside contents of ${plFile.name}` });
+                return plPath;
+            }
+        });
+
+        logger.error({ prefix: playlistId, msg: `Could not find any playlists with this ID` });
+        return null;
+    }
+}
+
 generateLocalYoutubePlaylistJson(
-    './output',
+    dirYoutubePlaylists,
     generateRandomId(32),
     'Lorem Ipsum',
     'Hello, World!',
@@ -119,6 +157,9 @@ generateLocalYoutubePlaylistJson(
     ]
 );
 
+getPlaylistPathFromId(dirYoutubePlaylists, 'leros');
+
+/*
 addVideoToExistingLocalYoutubePlaylist(
     '/mnt/seagate/workspace/coding/experimental/exp-sorted/output',
     'LOCbYSy1Uc5E8WRSQAThfbS1NAf3FGgdGr4',

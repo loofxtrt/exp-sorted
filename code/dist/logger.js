@@ -1,10 +1,11 @@
 import chalk from 'chalk';
-function baseLog(level, msg, details) {
+function baseLog({ level = 'text', prefix = undefined, msg, details = undefined }) {
     /**
      * imprime mensagens de log no terminal
      * todos os argumentos DESSA função são passados pelas outras subfunções de log
      *
-     * @param level - define o identificador que vai aparecer na frente do conteúdo
+     * @param level - define o indicador que vai aparecer na frente do conteúdo
+     * @param prefix - indicador opcional que aparece depois do level e antes da mensagem
      * @param msg - mensagem principal do log
      * @param details - detalhes adicionais e opcionais sobre o log
      *     podem ser passados como uma string única ou como um array
@@ -65,20 +66,47 @@ function baseLog(level, msg, details) {
         newDetails = color(newDetails);
     }
     // formatar a mensagem com ou sem os details, caso eles estejam presentes
-    const finalMsg = newDetails != null ? `${msg}: ${newDetails}` : `${msg}`;
+    let finalMsg = '';
+    if (typeof prefix == 'string' && prefix?.toString().trim() != '') {
+        finalMsg += `${prefix} ~ `;
+    }
+    finalMsg += msg;
+    if (details != null) {
+        finalMsg += `: ${details}`;
+    }
     console.log(`[ ${shortLevel} ] ${finalMsg}`);
 }
-function success(msg, details = null) {
-    baseLog('success', msg, details);
+function success({ prefix, msg, details }) {
+    baseLog({
+        level: 'success',
+        prefix: prefix,
+        msg: msg,
+        details: details
+    });
 }
-function error(msg, details = null) {
-    baseLog('error', msg, details);
+function error({ prefix, msg, details }) {
+    baseLog({
+        level: 'error',
+        prefix: prefix,
+        msg: msg,
+        details: details
+    });
 }
-function info(msg, details = null) {
-    baseLog('info', msg, details);
+function info({ prefix, msg, details }) {
+    baseLog({
+        level: 'info',
+        prefix: prefix,
+        msg: msg,
+        details: details
+    });
 }
-function warn(msg, details = null) {
-    baseLog('warn', msg, details);
+function warn({ prefix, msg, details }) {
+    baseLog({
+        level: 'warn',
+        prefix: prefix,
+        msg: msg,
+        details: details
+    });
 }
 export default {
     success,
