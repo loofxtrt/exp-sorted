@@ -39,13 +39,4 @@ function getConfigs(configFilePath: string) {
     }
 }
 
-export const getNameFor = {
-    youtubeLocalPlaylist(playlistId: string) {
-        return `youtube.playlist.local.${playlistId}.json`
-    },
-    youtubeServicePlaylist(playlistId: string) {
-        return `youtube.playlist.service.${playlistId}.json`
-    }
-}
-
 getConfigs('/mnt/seagate/workspace/coding/experimental/exp-sorted/simulated/config.yaml');

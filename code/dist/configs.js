@@ -27,4 +27,4 @@ function getConfigs(configFilePath) {
     }
 }
 getConfigs('/mnt/seagate/workspace/coding/experimental/exp-sorted/simulated/config.yaml');
-//# sourceMappingURL=data.js.map
+//# sourceMappingURL=configs.js.map

@@ -90,8 +90,8 @@ function baseLog({ level = 'text', prefix = undefined, msg, details = undefined 
 
     finalMsg += msg;
 
-    if (details != null) {
-        finalMsg += `: ${details}`;
+    if (newDetails != null) {
+        finalMsg += `: ${newDetails}`;
     }
     
     console.log(
