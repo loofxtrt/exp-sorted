@@ -1,14 +1,18 @@
 import chalk from 'chalk';
 function baseLog(level, msg, details) {
-    try {
-        msg = msg.toString();
-        details = details?.toString() ?? ''; // retornar uma string vazia caso seja null ou undefined
-    }
-    catch (err) {
-        console.error(err);
-    }
-    // definir qual vai ser a cor e formatação do level da mensagem
-    // baseada no level passado pra func
+    /**
+     * imprime mensagens de log no terminal
+     * todos os argumentos DESSA função são passados pelas outras subfunções de log
+     *
+     * @param level - define o identificador que vai aparecer na frente do conteúdo
+     * @param msg - mensagem principal do log
+     * @param details - detalhes adicionais e opcionais sobre o log
+     *     podem ser passados como uma string única ou como um array
+     *     no caso de serem passados como um array, cada item vai virar uma linha nova
+     *     e se não for passado, ele só não vai aparecer
+     */
+    // definir qual vai ser a cor e alias do level da mensagem baseada no level passado pra func
+    // toda versão curta de um level deve ter um número x de caracteres que é igual em todas as ocorrências
     let color;
     let shortLevel;
     switch (level) {
@@ -33,14 +37,36 @@ function baseLog(level, msg, details) {
             shortLevel = 'text';
             break;
     }
-    // colorir o level
+    // colorir o level e formatar o texto
     shortLevel = shortLevel.toUpperCase();
-    const finalLevel = color(shortLevel);
-    // colorir os details
-    details = color(details);
-    // formatar a mensagem com ou sem detalhes, caso a string passada não esteja inválida
-    const formattedMsg = details != null && details.toString().trim() != '' ? `${msg}: ${details}` : `${msg}`;
-    console.log(`[ ${finalLevel} ] ${formattedMsg}`);
+    shortLevel = color(shortLevel);
+    // tratar os details
+    let newDetails = null;
+    if (Array.isArray(details)) {
+        newDetails = '';
+        // caso os details passados sejam um array, escrever cada item
+        // como uma nova linha com indentação
+        details.forEach(item => {
+            item = item.trim();
+            newDetails += `\n   ${item}`;
+        });
+    }
+    else {
+        // caso seja uma string, garantir que ela não tá vazia
+        if (details?.toString().trim() != '') {
+            newDetails = details;
+        }
+        else {
+            newDetails = null;
+        }
+    }
+    // colorir os details com a mesma cor do level caso eles estejam presentes
+    if (typeof newDetails == 'string') {
+        newDetails = color(newDetails);
+    }
+    // formatar a mensagem com ou sem os details, caso eles estejam presentes
+    const finalMsg = newDetails != null ? `${msg}: ${newDetails}` : `${msg}`;
+    console.log(`[ ${shortLevel} ] ${finalMsg}`);
 }
 function success(msg, details = null) {
     baseLog('success', msg, details);

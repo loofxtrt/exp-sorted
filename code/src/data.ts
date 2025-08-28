@@ -20,9 +20,15 @@ function getConfigs(configFilePath: string) {
         const dataObject = yaml.load(file) as ConfigsInterface;
 
         dirYoutubeRoot = dataObject['youtube-directory'];
-        dirYoutubePlaylists = path.
+        dirYoutubePlaylists = path.join(dirYoutubeRoot, '@playlists');
 
-        logger.success('Successfully loaded configs');
+        logger.success(
+            'Successfully loaded configs',
+            [
+                `youtube root: ${dirYoutubeRoot}`,
+                `youtube playlists: ${dirYoutubePlaylists}`
+            ]
+        );
     } catch (err) {
         logger.error('Error while loading configs');
         console.error(err);
