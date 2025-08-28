@@ -1,4 +1,8 @@
-import fs, { ftruncateSync } from 'fs';
+/**
+ * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
+ */
+
+import fs from 'fs';
 import path from 'path';
 
 import logger from '../logger.js';
@@ -36,7 +40,7 @@ export function extractVideoIdFromUrl(videoUrl: string): string | null {
     }
 }
 
-export function generateLocalYoutubePlaylistJson(outputDir: string, id: string, title: string, description: string, videoUrls: string[]) {
+export function writeLocalPlaylist(outputDir: string, id: string, title: string, description: string, videoUrls: string[]) {
     // formatar o id com prefixo que indica uma playlist local
     if (!id.startsWith('LOC')) {
         id = 'LOC' + id;
@@ -73,7 +77,7 @@ export function generateLocalYoutubePlaylistJson(outputDir: string, id: string, 
     fs.writeFileSync(savePath, plDataString, 'utf-8');
 }
 
-export function addVideoToExistingLocalYoutubePlaylist(playlistFilePath: string, videoUrl: string) {
+export function addVideoToLocalPlaylist(playlistFilePath: string, videoUrl: string) {
     const videoId = extractVideoIdFromUrl(videoUrl);
     
     if (!videoId) {
@@ -82,7 +86,7 @@ export function addVideoToExistingLocalYoutubePlaylist(playlistFilePath: string,
     }
 
     // ler o arquivo passado e converter os dados de string pra objeto
-    const plDataObject = readPlaylistFileAndParseContents(playlistFilePath);
+    const plDataObject = readAndParseLocalPlaylist(playlistFilePath);
 
     // ignorar a requisição de adição caso o vídeo já esteja na playlist
     if (plDataObject['videos'].includes(videoId)) {
@@ -92,25 +96,25 @@ export function addVideoToExistingLocalYoutubePlaylist(playlistFilePath: string,
 
     // adicionar o id do video no array dos dados e escrever eles de volta no mesmo arquivo
     plDataObject['videos'].push(videoId);
-    writeDataObjectToPlaylist(plDataObject, playlistFilePath);
+    writeDataToLocalPlaylist(plDataObject, playlistFilePath);
 
     logger.success({ prefix: videoId, msg: 'Added video ID to playlist' });
 }
 
-export function writeDataObjectToPlaylist(data: PlaylistDataObject, playlistFilePath: string) {
+export function writeDataToLocalPlaylist(data: PlaylistDataObject, playlistFilePath: string) {
     const formattedData = JSON.stringify(data, null, 4); // passar o objeto pra formato de texto e usar 4 espaços pra indentação
     fs.writeFileSync(playlistFilePath, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
 
-export function removeVideoFromLocalYoutubePlaylist(playlistFilePath: string, videoId: string) {
-    const plData = readPlaylistFileAndParseContents(playlistFilePath);
+export function removeVideoFromLocalPlaylist(playlistFilePath: string, targetVideoId: string) {
+    const plData = readAndParseLocalPlaylist(playlistFilePath);
     
     // remover todas as ocorrências que sejam iguais a url do vídeo passado pra função
     // e depois reescrever esse array atualizado no arquivo da playlist
-    const updatedVideos = plData['videos'].filter(item => item !== videoId);
+    const updatedVideos = plData['videos'].filter(id => id !== targetVideoId);
     plData['videos'] = updatedVideos;
 
-    writeDataObjectToPlaylist(plData, playlistFilePath);
+    writeDataToLocalPlaylist(plData, playlistFilePath);
 }
 
 export function getLocalPlaylistPathFromId(youtubePlaylistsDir: string, playlistId: string): string | undefined {     
@@ -132,7 +136,7 @@ export function getLocalPlaylistPathFromId(youtubePlaylistsDir: string, playlist
 
             // converter o arquivo pra um path completo e ler ele
             const thisPlaylist = path.join(youtubePlaylistsDir, plFile.name);
-            const plObject = readPlaylistFileAndParseContents(thisPlaylist);
+            const plObject = readAndParseLocalPlaylist(thisPlaylist);
             
             // verificar se o id que está sendo procurado tá no conteúdo
             // for tradicional ao invés de foreach pra poder usar o break
@@ -153,7 +157,7 @@ export function getLocalPlaylistPathFromId(youtubePlaylistsDir: string, playlist
     }
 }
 
-export function readPlaylistFileAndParseContents(plFilePath: string): PlaylistDataObject {
+export function readAndParseLocalPlaylist(plFilePath: string): PlaylistDataObject {
     try {
         // tentar ler o arquivo e transformar o conteúdo de texto em json
         const stringData = fs.readFileSync(plFilePath, 'utf-8');
@@ -168,7 +172,7 @@ export function readPlaylistFileAndParseContents(plFilePath: string): PlaylistDa
     }
 }
 
-export function readLocalPlaylists(youtubePlaylistsDir: string) {
+export function listLocalPlaylists(youtubePlaylistsDir: string) {
     logger.info({ msg: 'Reading local playlists' });
 
     // ler o diretório e inicializar um array de tuplas vazio pra guardar as playlists obtidas
@@ -178,7 +182,7 @@ export function readLocalPlaylists(youtubePlaylistsDir: string) {
     allPlaylists.forEach(plFile => {
         // adicionar apenas as playlists definidas como locais no array final
         const fullPlPath = path.join(youtubePlaylistsDir, plFile.name);
-        const plContents = readPlaylistFileAndParseContents(fullPlPath);
+        const plContents = readAndParseLocalPlaylist(fullPlPath);
         
         const plType = plContents['type'];
         if (plType == 'local') {
