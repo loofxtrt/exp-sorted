@@ -1,7 +1,7 @@
 import { writeLocalPlaylist } from "./interact/youtube.js";
 import { generateRandomId } from "./helpers.js";
 
-export function createTestPlaylist(youtubePlaylistsDir: string, idLength: number = 32) {
+export function createTestPlaylist(dirYtPlaylists: string, idLength: number) {
     // gerar números aleatórios
     // randomnumber é genérico e serve pra definir a quantidade/length de algo
     // o randomindex serve pra pegar um número aleatório que esteja dentro do limite de um array específico
@@ -50,7 +50,7 @@ export function createTestPlaylist(youtubePlaylistsDir: string, idLength: number
 
     // criar uma nova playlist com essas informações
     writeLocalPlaylist(
-        youtubePlaylistsDir,
+        dirYtPlaylists,
         generateRandomId(idLength),
         title,
         desc,

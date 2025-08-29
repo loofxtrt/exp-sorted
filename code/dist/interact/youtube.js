@@ -28,11 +28,11 @@ export function extractVideoIdFromUrl(videoUrl) {
         return null;
     }
 }
-export function writeLocalPlaylist(dirOutput, id, title, description, videoUrls) {
+export function writeLocalPlaylist(dirYtPlaylists, id, title, description, videoUrls) {
     /**
-     * gera e escreve o arquivo que vai representar uma playlist
+     * gera, escreve e cria o arquivo que vai representar uma playlist
      *
-     * @param dirOutput - onde essa playlist vai ser escrita
+     * @param dirYtPlaylists - onde essa playlist vai ser escrita
      *  normalmente, é no diretório global de playlists do youtube definido nas configurações
      */
     // formatar o id com prefixo que indica uma playlist local
@@ -59,7 +59,7 @@ export function writeLocalPlaylist(dirOutput, id, title, description, videoUrls)
     };
     const plDataString = JSON.stringify(plDataObject, null, 4);
     // escrever o arquivo final
-    const savePath = path.join(dirOutput, getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
+    const savePath = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
     );
     fs.writeFileSync(savePath, plDataString, 'utf-8');
 }
@@ -91,11 +91,12 @@ export function writeDataToLocalPlaylist(data, filePlaylist) {
     const formattedData = JSON.stringify(data, null, 4); // passar o objeto pra formato de texto e usar 4 espaços pra indentação
     fs.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
-export function removeVideoFromLocalPlaylist(filePlaylist, targetVideoId) {
+export function removeVideoFromLocalPlaylist(filePlaylist, videoUrl) {
     const plData = readAndParseLocalPlaylist(filePlaylist);
+    const targetVideoId = extractVideoIdFromUrl(videoUrl);
     // remover todas as ocorrências que sejam iguais a url do vídeo passado pra função
     // e depois reescrever esse array atualizado no arquivo da playlist
-    const updatedVideos = plData['videos'].filter(id => id !== targetVideoId);
+    const updatedVideos = plData['videos'].filter(onPlaylistId => onPlaylistId !== targetVideoId);
     plData['videos'] = updatedVideos;
     writeDataToLocalPlaylist(plData, filePlaylist);
 }

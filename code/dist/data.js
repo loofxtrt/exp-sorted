@@ -6,6 +6,7 @@ import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import logger from './logger.js';
+export const CONFIG_ID_LENGTH = 32;
 export let CONFIG_DIR_YT_ROOT = '';
 export let CONFIG_DIR_YT_PLAYLISTS = '';
 function getConfigs(configFilePath) {

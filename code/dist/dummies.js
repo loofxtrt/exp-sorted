@@ -1,6 +1,6 @@
 import { writeLocalPlaylist } from "./interact/youtube.js";
 import { generateRandomId } from "./helpers.js";
-export function createTestPlaylist(youtubePlaylistsDir, idLength = 32) {
+export function createTestPlaylist(dirYtPlaylists, idLength) {
     // gerar números aleatórios
     // randomnumber é genérico e serve pra definir a quantidade/length de algo
     // o randomindex serve pra pegar um número aleatório que esteja dentro do limite de um array específico
@@ -38,7 +38,7 @@ export function createTestPlaylist(youtubePlaylistsDir, idLength = 32) {
         videoCount -= 1;
     }
     // criar uma nova playlist com essas informações
-    writeLocalPlaylist(youtubePlaylistsDir, generateRandomId(idLength), title, desc, videos);
+    writeLocalPlaylist(dirYtPlaylists, generateRandomId(idLength), title, desc, videos);
 }
 // https://perchance.org/youtube-video
 export const videoUrls = [

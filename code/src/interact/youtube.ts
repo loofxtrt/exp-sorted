@@ -33,11 +33,11 @@ export function extractVideoIdFromUrl(videoUrl: string): string | null {
     }
 }
 
-export function writeLocalPlaylist(dirOutput: string, id: string, title: string, description: string, videoUrls: string[]) {
+export function writeLocalPlaylist(dirYtPlaylists: string, id: string, title: string, description: string, videoUrls: string[]) {
     /**
-     * gera e escreve o arquivo que vai representar uma playlist
+     * gera, escreve e cria o arquivo que vai representar uma playlist
      * 
-     * @param dirOutput - onde essa playlist vai ser escrita
+     * @param dirYtPlaylists - onde essa playlist vai ser escrita
      *  normalmente, é no diretório global de playlists do youtube definido nas configurações
      */
 
@@ -71,7 +71,7 @@ export function writeLocalPlaylist(dirOutput: string, id: string, title: string,
 
     // escrever o arquivo final
     const savePath = path.join(
-        dirOutput,
+        dirYtPlaylists,
         getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
     );
     fs.writeFileSync(savePath, plDataString, 'utf-8');
@@ -113,12 +113,13 @@ export function writeDataToLocalPlaylist(data: PlaylistDataObject, filePlaylist:
     fs.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
 
-export function removeVideoFromLocalPlaylist(filePlaylist: string, targetVideoId: string) {
+export function removeVideoFromLocalPlaylist(filePlaylist: string, videoUrl: string) {
     const plData = readAndParseLocalPlaylist(filePlaylist);
+    const targetVideoId = extractVideoIdFromUrl(videoUrl);
     
     // remover todas as ocorrências que sejam iguais a url do vídeo passado pra função
     // e depois reescrever esse array atualizado no arquivo da playlist
-    const updatedVideos = plData['videos'].filter(id => id !== targetVideoId);
+    const updatedVideos = plData['videos'].filter(onPlaylistId => onPlaylistId !== targetVideoId);
     plData['videos'] = updatedVideos;
 
     writeDataToLocalPlaylist(plData, filePlaylist);
