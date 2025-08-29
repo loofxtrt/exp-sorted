@@ -2,8 +2,8 @@ import path from 'path';
 import fs from 'fs';
 import yaml from 'js-yaml';
 import logger from './logger.js';
-export let dirYoutubeRoot = '';
-export let dirYoutubePlaylists = '';
+export let dirYtRoot = '';
+export let dirYtPlaylists = '';
 function getConfigs(configFilePath) {
     logger.info({ msg: 'Loading configs' });
     try {
@@ -12,13 +12,13 @@ function getConfigs(configFilePath) {
         const dataObject = yaml.load(file);
         // obter seus valores hardcodeds (tipo o diretório root)
         // e montar os relativos (tipo ytroot/@playlists)
-        dirYoutubeRoot = dataObject['youtube-directory'];
-        dirYoutubePlaylists = path.join(dirYoutubeRoot, '@playlists');
+        dirYtRoot = dataObject['youtube-directory'];
+        dirYtPlaylists = path.join(dirYtRoot, '@playlists');
         logger.success({
             msg: 'Successfully loaded configs',
             details: [
-                `youtube root: ${dirYoutubeRoot}`,
-                `youtube playlists: ${dirYoutubePlaylists}`
+                `youtube root: ${dirYtRoot}`,
+                `youtube playlists: ${dirYtPlaylists}`
             ]
         });
     }

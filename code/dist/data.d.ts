@@ -1,3 +1,3 @@
-export declare let dirYoutubeRoot: string;
-export declare let dirYoutubePlaylists: string;
+export declare let dirYtRoot: string;
+export declare let dirYtPlaylists: string;
 //# sourceMappingURL=data.d.ts.map

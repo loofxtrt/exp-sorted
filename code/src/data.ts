@@ -5,8 +5,8 @@ import yaml from 'js-yaml';
 
 import logger from './logger.js';
 
-export let dirYoutubeRoot: string = '';
-export let dirYoutubePlaylists: string = '';
+export let dirYtRoot: string = '';
+export let dirYtPlaylists: string = '';
 
 interface ConfigsInterface {
     'youtube-directory': string
@@ -22,15 +22,15 @@ function getConfigs(configFilePath: string) {
 
         // obter seus valores hardcodeds (tipo o diretório root)
         // e montar os relativos (tipo ytroot/@playlists)
-        dirYoutubeRoot = dataObject['youtube-directory'];
-        dirYoutubePlaylists = path.join(dirYoutubeRoot, '@playlists');
+        dirYtRoot = dataObject['youtube-directory'];
+        dirYtPlaylists = path.join(dirYtRoot, '@playlists');
 
         logger.success(
             {
                 msg: 'Successfully loaded configs',
                 details: [
-                    `youtube root: ${dirYoutubeRoot}`,
-                    `youtube playlists: ${dirYoutubePlaylists}`
+                    `youtube root: ${dirYtRoot}`,
+                    `youtube playlists: ${dirYtPlaylists}`
                 ]
             }
         );

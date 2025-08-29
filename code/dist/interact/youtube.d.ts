@@ -9,11 +9,11 @@ export interface PlaylistDataObject {
     videos: string[];
 }
 export declare function extractVideoIdFromUrl(videoUrl: string): string | null;
-export declare function writeLocalPlaylist(outputDir: string, id: string, title: string, description: string, videoUrls: string[]): void;
-export declare function addVideoToLocalPlaylist(playlistFilePath: string, videoUrl: string): void;
-export declare function writeDataToLocalPlaylist(data: PlaylistDataObject, playlistFilePath: string): void;
-export declare function removeVideoFromLocalPlaylist(playlistFilePath: string, targetVideoId: string): void;
-export declare function getLocalPlaylistPathFromId(youtubePlaylistsDir: string, playlistId: string): string | undefined;
-export declare function readAndParseLocalPlaylist(plFilePath: string): PlaylistDataObject;
-export declare function listLocalPlaylists(youtubePlaylistsDir: string): void;
+export declare function writeLocalPlaylist(dirOutput: string, id: string, title: string, description: string, videoUrls: string[]): void;
+export declare function addVideoToLocalPlaylist(filePlaylist: string, videoUrl: string): void;
+export declare function writeDataToLocalPlaylist(data: PlaylistDataObject, filePlaylist: string): void;
+export declare function removeVideoFromLocalPlaylist(filePlaylist: string, targetVideoId: string): void;
+export declare function getLocalPlaylistPathFromId(dirYtPlaylists: string, playlistId: string): string | undefined;
+export declare function readAndParseLocalPlaylist(filePlaylist: string): PlaylistDataObject;
+export declare function listLocalPlaylists(dirYtPlaylists: string): void;
 //# sourceMappingURL=youtube.d.ts.map
