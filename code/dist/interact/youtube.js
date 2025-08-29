@@ -2,6 +2,9 @@
 /**
  * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractVideoIdFromUrl = extractVideoIdFromUrl;
 exports.writeLocalPlaylist = writeLocalPlaylist;
@@ -11,9 +14,9 @@ exports.removeVideoFromLocalPlaylist = removeVideoFromLocalPlaylist;
 exports.getLocalPlaylistPathFromId = getLocalPlaylistPathFromId;
 exports.readAndParseLocalPlaylist = readAndParseLocalPlaylist;
 exports.listLocalPlaylists = listLocalPlaylists;
-const fs_1 = require("fs");
-const path_1 = require("path");
-const logger_js_1 = require("../logger.js");
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const logger_js_1 = __importDefault(require("../logger.js"));
 const helpers_js_1 = require("../helpers.js");
 function extractVideoIdFromUrl(videoUrl) {
     // esse regex obtém tudo que vem depois de 'v=', mas para de obter caracteres se encontrar um '&' ou chegar ao fim da string

@@ -3,12 +3,15 @@
  * arquivo que varre as configurações, e baseado nelas, define os valores globais que o software deve usar
  * toda variável global deve ser escrita em SNAKE_CASE e começar com CONFIG_
  */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CONFIG_DIR_YT_PLAYLISTS = exports.CONFIG_DIR_YT_ROOT = exports.CONFIG_FILE_HTML_INDEX = exports.CONFIG_DIR_VISUAL = exports.CONFIG_ID_LENGTH = void 0;
-const path_1 = require("path");
-const fs_1 = require("fs");
-const js_yaml_1 = require("js-yaml");
-const logger_js_1 = require("./logger.js");
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const js_yaml_1 = __importDefault(require("js-yaml"));
+const logger_js_1 = __importDefault(require("./logger.js"));
 exports.CONFIG_ID_LENGTH = 32;
 exports.CONFIG_DIR_VISUAL = '../../visual';
 exports.CONFIG_FILE_HTML_INDEX = path_1.default.join(exports.CONFIG_DIR_VISUAL, 'index.html');
