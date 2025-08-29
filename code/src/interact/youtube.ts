@@ -7,14 +7,7 @@ import path from 'path';
 
 import logger from '../logger.js';
 import { getNameFor } from '../helpers.js';
-
-export interface PlaylistDataObject {
-    id: string,
-    type: 'local' | 'service',
-    title: string,
-    description: string,
-    videos: string[]
-}
+import type { PlaylistDataObject } from '../data.js';
 
 export function extractVideoIdFromUrl(videoUrl: string): string | null {
     // esse regex obtém tudo que vem depois de 'v=', mas para de obter caracteres se encontrar um '&' ou chegar ao fim da string
@@ -41,6 +34,13 @@ export function extractVideoIdFromUrl(videoUrl: string): string | null {
 }
 
 export function writeLocalPlaylist(dirOutput: string, id: string, title: string, description: string, videoUrls: string[]) {
+    /**
+     * gera e escreve o arquivo que vai representar uma playlist
+     * 
+     * @param dirOutput - onde essa playlist vai ser escrita
+     *  normalmente, é no diretório global de playlists do youtube definido nas configurações
+     */
+
     // formatar o id com prefixo que indica uma playlist local
     if (!id.startsWith('LOC')) {
         id = 'LOC' + id;
@@ -102,6 +102,13 @@ export function addVideoToLocalPlaylist(filePlaylist: string, videoUrl: string) 
 }
 
 export function writeDataToLocalPlaylist(data: PlaylistDataObject, filePlaylist: string) {
+    /**
+     * sobreescreve os dados dentro de uma playlist
+     * usadas principalmente pra adicionar e remover vídeos
+     * 
+     * @param data - os dados, JÁ CONVERTIDOS PRA OBJETO, e não texto
+     */
+
     const formattedData = JSON.stringify(data, null, 4); // passar o objeto pra formato de texto e usar 4 espaços pra indentação
     fs.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
@@ -158,6 +165,11 @@ export function getLocalPlaylistPathFromId(dirYtPlaylists: string, playlistId: s
 }
 
 export function readAndParseLocalPlaylist(filePlaylist: string): PlaylistDataObject {
+    /**
+     * lê o conteúdo de um arquivo que representa uma playlist
+     * e retorna o texto convertido em um objeto
+     */
+
     try {
         // tentar ler o arquivo e transformar o conteúdo de texto em json
         const stringData = fs.readFileSync(filePlaylist, 'utf-8');

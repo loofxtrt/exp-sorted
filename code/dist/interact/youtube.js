@@ -29,6 +29,12 @@ export function extractVideoIdFromUrl(videoUrl) {
     }
 }
 export function writeLocalPlaylist(dirOutput, id, title, description, videoUrls) {
+    /**
+     * gera e escreve o arquivo que vai representar uma playlist
+     *
+     * @param dirOutput - onde essa playlist vai ser escrita
+     *  normalmente, é no diretório global de playlists do youtube definido nas configurações
+     */
     // formatar o id com prefixo que indica uma playlist local
     if (!id.startsWith('LOC')) {
         id = 'LOC' + id;
@@ -76,6 +82,12 @@ export function addVideoToLocalPlaylist(filePlaylist, videoUrl) {
     logger.success({ prefix: videoId, msg: 'Added video ID to playlist' });
 }
 export function writeDataToLocalPlaylist(data, filePlaylist) {
+    /**
+     * sobreescreve os dados dentro de uma playlist
+     * usadas principalmente pra adicionar e remover vídeos
+     *
+     * @param data - os dados, JÁ CONVERTIDOS PRA OBJETO, e não texto
+     */
     const formattedData = JSON.stringify(data, null, 4); // passar o objeto pra formato de texto e usar 4 espaços pra indentação
     fs.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
@@ -124,6 +136,10 @@ export function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
     }
 }
 export function readAndParseLocalPlaylist(filePlaylist) {
+    /**
+     * lê o conteúdo de um arquivo que representa uma playlist
+     * e retorna o texto convertido em um objeto
+     */
     try {
         // tentar ler o arquivo e transformar o conteúdo de texto em json
         const stringData = fs.readFileSync(filePlaylist, 'utf-8');

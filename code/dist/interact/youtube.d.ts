@@ -1,13 +1,7 @@
 /**
  * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
  */
-export interface PlaylistDataObject {
-    id: string;
-    type: 'local' | 'service';
-    title: string;
-    description: string;
-    videos: string[];
-}
+import type { PlaylistDataObject } from '../data.js';
 export declare function extractVideoIdFromUrl(videoUrl: string): string | null;
 export declare function writeLocalPlaylist(dirOutput: string, id: string, title: string, description: string, videoUrls: string[]): void;
 export declare function addVideoToLocalPlaylist(filePlaylist: string, videoUrl: string): void;
