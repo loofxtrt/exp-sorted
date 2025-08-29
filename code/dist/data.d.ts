@@ -4,7 +4,7 @@
  */
 export declare const CONFIG_ID_LENGTH = 32;
 export declare const CONFIG_DIR_VISUAL = "../../visual";
-export declare const CONFIG_FILE_HTML_INDEX: string;
+export declare const CONFIG_FILE_HTML_INDEX: any;
 export declare let CONFIG_DIR_YT_ROOT: string;
 export declare let CONFIG_DIR_YT_PLAYLISTS: string;
 export interface PlaylistDataObject {

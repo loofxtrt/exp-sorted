@@ -1,4 +1,6 @@
-import chalk from 'chalk';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const chalk_1 = require("chalk");
 function baseLog({ level = 'text', prefix = undefined, msg, details = undefined }) {
     /**
      * imprime mensagens de log no terminal
@@ -18,23 +20,23 @@ function baseLog({ level = 'text', prefix = undefined, msg, details = undefined 
     let shortLevel;
     switch (level) {
         case 'success':
-            color = chalk.green;
+            color = chalk_1.default.green;
             shortLevel = 'okay';
             break;
         case 'error':
-            color = chalk.red;
+            color = chalk_1.default.red;
             shortLevel = 'erro';
             break;
         case 'info':
-            color = chalk.blue;
+            color = chalk_1.default.blue;
             shortLevel = 'info';
             break;
         case 'warn':
-            color = chalk.yellow;
+            color = chalk_1.default.yellow;
             shortLevel = 'warn';
             break;
         default:
-            color = chalk.reset;
+            color = chalk_1.default.reset;
             shortLevel = 'text';
             break;
     }
@@ -108,7 +110,7 @@ function warn({ prefix, msg, details }) {
         details: details
     });
 }
-export default {
+exports.default = {
     success,
     error,
     info,

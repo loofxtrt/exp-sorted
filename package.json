@@ -4,8 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "ele": "electron ./code/dist/electron/run.js",
-    "dev": "node ./code/dist/main.js"
+    "ele": "electron ./code/dist/electron/main.js",
+    "dev": "node ./code/dist/headless.js"
   },
   "keywords": [],
   "author": "",
