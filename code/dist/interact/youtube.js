@@ -2,9 +2,6 @@
 /**
  * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.extractVideoIdFromUrl = extractVideoIdFromUrl;
 exports.writeLocalPlaylist = writeLocalPlaylist;
@@ -14,10 +11,10 @@ exports.removeVideoFromLocalPlaylist = removeVideoFromLocalPlaylist;
 exports.getLocalPlaylistPathFromId = getLocalPlaylistPathFromId;
 exports.readAndParseLocalPlaylist = readAndParseLocalPlaylist;
 exports.listLocalPlaylists = listLocalPlaylists;
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const logger_js_1 = __importDefault(require("../logger.js"));
-const helpers_js_1 = require("../helpers.js");
+const fs = require('fs');
+const path = require('path');
+const logger = require('../logger.js');
+const { getNameFor } = require('../helpers.js');
 function extractVideoIdFromUrl(videoUrl) {
     // esse regex obtém tudo que vem depois de 'v=', mas para de obter caracteres se encontrar um '&' ou chegar ao fim da string
     // o que resta disso é o id do vídeo, que geralmente fica depois de watch?v=
@@ -28,16 +25,16 @@ function extractVideoIdFromUrl(videoUrl) {
         // retornar o id obtido
         const videoId = match[1];
         if (videoId) {
-            logger_js_1.default.success({ msg: `Successfully extracted video ID`, details: videoId });
+            logger.success({ msg: `Successfully extracted video ID`, details: videoId });
             return videoId;
         }
         else {
-            logger_js_1.default.error({ msg: 'Matches were found but something went wrong while extracing video ID' });
+            logger.error({ msg: 'Matches were found but something went wrong while extracing video ID' });
             return null;
         }
     }
     else {
-        logger_js_1.default.error({ msg: 'Error while extracting video ID', details: 'no matches' });
+        logger.error({ msg: 'Error while extracting video ID', details: 'no matches' });
         return null;
     }
 }
@@ -72,27 +69,27 @@ function writeLocalPlaylist(dirYtPlaylists, id, title, description, videoUrls) {
     };
     const plDataString = JSON.stringify(plDataObject, null, 4);
     // escrever o arquivo final
-    const savePath = path_1.default.join(dirYtPlaylists, helpers_js_1.getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
+    const savePath = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
     );
-    fs_1.default.writeFileSync(savePath, plDataString, 'utf-8');
+    fs.writeFileSync(savePath, plDataString, 'utf-8');
 }
 function addVideoToLocalPlaylist(filePlaylist, videoUrl) {
     const videoId = extractVideoIdFromUrl(videoUrl);
     if (!videoId) {
-        logger_js_1.default.error({ prefix: videoUrl, msg: `Error while extracting video ID`, details: `video ID not found` });
+        logger.error({ prefix: videoUrl, msg: `Error while extracting video ID`, details: `video ID not found` });
         return;
     }
     // ler o arquivo passado e converter os dados de string pra objeto
     const plDataObject = readAndParseLocalPlaylist(filePlaylist);
     // ignorar a requisição de adição caso o vídeo já esteja na playlist
     if (plDataObject['videos'].includes(videoId)) {
-        logger_js_1.default.info({ msg: 'Ignored video inclusion on playlist', details: 'video already exists' });
+        logger.info({ msg: 'Ignored video inclusion on playlist', details: 'video already exists' });
         return;
     }
     // adicionar o id do video no array dos dados e escrever eles de volta no mesmo arquivo
     plDataObject['videos'].push(videoId);
     writeDataToLocalPlaylist(plDataObject, filePlaylist);
-    logger_js_1.default.success({ prefix: videoId, msg: 'Added video ID to playlist' });
+    logger.success({ prefix: videoId, msg: 'Added video ID to playlist' });
 }
 function writeDataToLocalPlaylist(data, filePlaylist) {
     /**
@@ -102,7 +99,7 @@ function writeDataToLocalPlaylist(data, filePlaylist) {
      * @param data - os dados, JÁ CONVERTIDOS PRA OBJETO, e não texto
      */
     const formattedData = JSON.stringify(data, null, 4); // passar o objeto pra formato de texto e usar 4 espaços pra indentação
-    fs_1.default.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
+    fs.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
 function removeVideoFromLocalPlaylist(filePlaylist, videoUrl) {
     const plData = readAndParseLocalPlaylist(filePlaylist);
@@ -116,27 +113,27 @@ function removeVideoFromLocalPlaylist(filePlaylist, videoUrl) {
 function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
     // primeiro, tentar obter o arquivo da playlist apenas pelo nome
     // isso pode falhar caso o usuário tenha mudado manualmente o nome do arquivo ou caso ele só não exista
-    let plPath = path_1.default.join(dirYtPlaylists, helpers_js_1.getNameFor.youtubeLocalPlaylist(playlistId));
-    if (fs_1.default.existsSync(plPath)) {
-        logger_js_1.default.success({ prefix: playlistId, msg: `Found playlist ID in the file name of the playlist` });
+    let plPath = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(playlistId));
+    if (fs.existsSync(plPath)) {
+        logger.success({ prefix: playlistId, msg: `Found playlist ID in the file name of the playlist` });
         return plPath;
     }
     else {
         // se não achar a playlist pelo nome, zera o plpath e tenta achar o id dentro do conteúdo de cada arquivo de playlist existente
         // se ainda assim não achar, dá erro e para a busca, deixando plpath vazio pra indicar o erro
         plPath = undefined;
-        const allPlaylistFiles = fs_1.default.readdirSync(dirYtPlaylists, { withFileTypes: true }); // ler o dir mantendo os tipos dos arquivos
+        const allPlaylistFiles = fs.readdirSync(dirYtPlaylists, { withFileTypes: true }); // ler o dir mantendo os tipos dos arquivos
         for (const plFile of allPlaylistFiles) {
             if (!plFile.isFile())
                 return;
             // converter o arquivo pra um path completo e ler ele
-            const thisPlaylist = path_1.default.join(dirYtPlaylists, plFile.name);
+            const thisPlaylist = path.join(dirYtPlaylists, plFile.name);
             const plObject = readAndParseLocalPlaylist(thisPlaylist);
             // verificar se o id que está sendo procurado tá no conteúdo
             // for tradicional ao invés de foreach pra poder usar o break
             if (plObject['id'] === playlistId) {
                 plPath = thisPlaylist;
-                logger_js_1.default.success({ prefix: playlistId, msg: `Found playlist ID inside the contents of ${plFile.name}` });
+                logger.success({ prefix: playlistId, msg: `Found playlist ID inside the contents of ${plFile.name}` });
                 break;
             }
         }
@@ -146,7 +143,7 @@ function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
         return plPath;
     }
     else {
-        logger_js_1.default.error({ prefix: playlistId, msg: `Could not find any playlists with this ID` });
+        logger.error({ prefix: playlistId, msg: `Could not find any playlists with this ID` });
     }
 }
 function readAndParseLocalPlaylist(filePlaylist) {
@@ -156,7 +153,7 @@ function readAndParseLocalPlaylist(filePlaylist) {
      */
     try {
         // tentar ler o arquivo e transformar o conteúdo de texto em json
-        const stringData = fs_1.default.readFileSync(filePlaylist, 'utf-8');
+        const stringData = fs.readFileSync(filePlaylist, 'utf-8');
         const objectData = JSON.parse(stringData);
         return objectData;
     }
@@ -168,13 +165,13 @@ function readAndParseLocalPlaylist(filePlaylist) {
     }
 }
 function listLocalPlaylists(dirYtPlaylists) {
-    logger_js_1.default.info({ msg: 'Reading local playlists' });
+    logger.info({ msg: 'Reading local playlists' });
     // ler o diretório e inicializar um array de tuplas vazio pra guardar as playlists obtidas
-    const allPlaylists = fs_1.default.readdirSync(dirYtPlaylists, { withFileTypes: true });
+    const allPlaylists = fs.readdirSync(dirYtPlaylists, { withFileTypes: true });
     const onlyLocalPlaylists = [];
-    allPlaylists.forEach(filePl => {
+    allPlaylists.forEach((filePl) => {
         // adicionar apenas as playlists definidas como locais no array final
-        const fullPlPath = path_1.default.join(dirYtPlaylists, filePl.name);
+        const fullPlPath = path.join(dirYtPlaylists, filePl.name);
         const plContents = readAndParseLocalPlaylist(fullPlPath);
         const plType = plContents['type'];
         if (plType == 'local') {
@@ -185,13 +182,13 @@ function listLocalPlaylists(dirYtPlaylists) {
     if (onlyLocalPlaylists.length > 0) {
         // obter apenas a coluna com os títulos das playlists
         const playlistTitles = onlyLocalPlaylists.map(tuple => tuple[1]);
-        logger_js_1.default.success({
+        logger.success({
             msg: `Finished reading local playlists. You have ${onlyLocalPlaylists.length} of them`,
             details: playlistTitles
         });
     }
     else {
-        logger_js_1.default.success({ msg: 'Finished reading local playlists. You don\'t have any of them' });
+        logger.success({ msg: 'Finished reading local playlists. You don\'t have any of them' });
     }
 }
 //# sourceMappingURL=youtube.js.map

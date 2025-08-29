@@ -1,11 +1,3 @@
-/*import path from 'path';
-//import { fileURLToPath } from 'url'; // pra construir o __dirname
-
-import { app, BrowserWindow } from 'electron';
-
-import { CONFIG_FILE_HTML_INDEX } from '../data.js';
-*/
-
 const path = require('path');
 const { app, BrowserWindow } = require('electron');
 const { CONFIG_FILE_HTML_INDEX } = require('../data.js');
@@ -19,7 +11,8 @@ function createMainWindow() {
         width: 800,
         height: 500,
         webPreferences: {
-            preload: '/mnt/seagate/workspace/coding/experimental/exp-sorted/code/dist/electron/preload.js'//path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, 'preload.js'),
+            sandbox: false // sem isso os paths, tipo o do preload, quebram
         }
     });
 

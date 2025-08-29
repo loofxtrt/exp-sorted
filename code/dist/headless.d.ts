@@ -1,5 +1,5 @@
 /**
  * anteriormente era main.ts, serve pra fazer testes via script sem usar a interface
  */
-import './data.js';
+export {};
 //# sourceMappingURL=headless.d.ts.map

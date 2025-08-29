@@ -2,12 +2,12 @@
  * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
  */
 
-import fs from 'fs';
-import path from 'path';
-
-import logger from '../logger.js';
-import { getNameFor } from '../helpers.js';
+const fs = require('fs');
+const path = require('path');
+const logger = require('../logger.js');
+const { getNameFor } = require('../helpers.js');
 import type { PlaylistDataObject } from '../data.js';
+import type { Dirent } from 'fs'; // sem isso não dá pra usar o tipo só com fs.Dirent
 
 export function extractVideoIdFromUrl(videoUrl: string): string | null {
     // esse regex obtém tudo que vem depois de 'v=', mas para de obter caracteres se encontrar um '&' ou chegar ao fim da string
@@ -192,7 +192,7 @@ export function listLocalPlaylists(dirYtPlaylists: string) {
     const allPlaylists = fs.readdirSync(dirYtPlaylists, { withFileTypes: true });
     const onlyLocalPlaylists: [string, string][] = [];
 
-    allPlaylists.forEach(filePl => {
+    allPlaylists.forEach((filePl: Dirent) => {
         // adicionar apenas as playlists definidas como locais no array final
         const fullPlPath = path.join(dirYtPlaylists, filePl.name);
         const plContents = readAndParseLocalPlaylist(fullPlPath);

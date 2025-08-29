@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.words = exports.videoUrls = void 0;
 exports.createTestPlaylist = createTestPlaylist;
-const youtube_js_1 = require("./interact/youtube.js");
-const helpers_js_1 = require("./helpers.js");
+const { writeLocalPlaylist } = require('./interact/youtube.js');
+const { generateRandomId } = require('./helpers.js');
 function createTestPlaylist(dirYtPlaylists, idLength) {
     // gerar números aleatórios
     // randomnumber é genérico e serve pra definir a quantidade/length de algo
@@ -42,7 +42,7 @@ function createTestPlaylist(dirYtPlaylists, idLength) {
         videoCount -= 1;
     }
     // criar uma nova playlist com essas informações
-    (0, youtube_js_1.writeLocalPlaylist)(dirYtPlaylists, (0, helpers_js_1.generateRandomId)(idLength), title, desc, videos);
+    writeLocalPlaylist(dirYtPlaylists, generateRandomId(idLength), title, desc, videos);
 }
 // https://perchance.org/youtube-video
 exports.videoUrls = [

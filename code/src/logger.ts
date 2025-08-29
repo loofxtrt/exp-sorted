@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+const chalk = require('chalk');
 
 type logOptions = {
     // parâmetros opcionais aqui não recebem ? + | undefined + | null
@@ -139,7 +139,8 @@ function warn({ prefix, msg, details }: logOptions) {
     });
 }
 
-export default {
+// module.exports em vez export defaults pra seguir o commonjs
+module.exports = {
     success,
     error,
     info,

@@ -1,4 +1,4 @@
-import { CONFIG_DIR_YT_PLAYLISTS } from "../data.js";
+const { CONFIG_DIR_YT_PLAYLISTS } = require('../data.js');
 
 const playlistUl = document.querySelector('ul#playlist-list');
 

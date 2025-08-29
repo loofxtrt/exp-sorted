@@ -1,9 +1,6 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const chalk_1 = __importDefault(require("chalk"));
+const chalk = require('chalk');
 function baseLog({ level = 'text', prefix = undefined, msg, details = undefined }) {
     /**
      * imprime mensagens de log no terminal
@@ -23,23 +20,23 @@ function baseLog({ level = 'text', prefix = undefined, msg, details = undefined 
     let shortLevel;
     switch (level) {
         case 'success':
-            color = chalk_1.default.green;
+            color = chalk.green;
             shortLevel = 'okay';
             break;
         case 'error':
-            color = chalk_1.default.red;
+            color = chalk.red;
             shortLevel = 'erro';
             break;
         case 'info':
-            color = chalk_1.default.blue;
+            color = chalk.blue;
             shortLevel = 'info';
             break;
         case 'warn':
-            color = chalk_1.default.yellow;
+            color = chalk.yellow;
             shortLevel = 'warn';
             break;
         default:
-            color = chalk_1.default.reset;
+            color = chalk.reset;
             shortLevel = 'text';
             break;
     }
@@ -113,7 +110,8 @@ function warn({ prefix, msg, details }) {
         details: details
     });
 }
-exports.default = {
+// module.exports em vez export defaults pra seguir o commonjs
+module.exports = {
     success,
     error,
     info,

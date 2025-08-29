@@ -1,5 +1,5 @@
-import { writeLocalPlaylist } from "./interact/youtube.js";
-import { generateRandomId } from "./helpers.js";
+const { writeLocalPlaylist } = require('./interact/youtube.js');
+const { generateRandomId } = require('./helpers.js');
 
 export function createTestPlaylist(dirYtPlaylists: string, idLength: number) {
     // gerar números aleatórios
