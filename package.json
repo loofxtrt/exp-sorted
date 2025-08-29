@@ -4,6 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
+    "ele": "electron ./code/dist/electron/run.js",
     "dev": "node ./code/dist/main.js"
   },
   "keywords": [],

@@ -11,6 +11,9 @@ import yaml from 'js-yaml';
 import logger from './logger.js';
 
 export const CONFIG_ID_LENGTH = 32;
+export const CONFIG_DIR_VISUAL = '../../visual';
+export const CONFIG_FILE_HTML_INDEX = path.join(CONFIG_DIR_VISUAL, 'index.html');
+
 export let CONFIG_DIR_YT_ROOT: string = '';
 export let CONFIG_DIR_YT_PLAYLISTS: string = '';
 
