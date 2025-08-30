@@ -3,10 +3,10 @@
  * toda variável global deve ser escrita em SNAKE_CASE e começar com CONFIG_
  */
 
-const path = require('path');
-const fs = require('fs');
-const yaml = require('js-yaml');
-const logger = require('./logger.js');
+import path from "path";
+import fs from "fs";
+import yaml from "js-yaml";
+import logger from "./logger.js";
 
 export const CONFIG_ID_LENGTH = 32;
 export const CONFIG_DIR_VISUAL = '../../visual';

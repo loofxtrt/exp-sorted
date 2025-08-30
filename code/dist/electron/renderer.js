@@ -1,13 +1,11 @@
-"use strict";
-//const { CONFIG_DIR_YT_PLAYLISTS } = require('../data.js');
-Object.defineProperty(exports, "__esModule", { value: true });
 const playlistUl = document.querySelector('ul#playlist-list');
 window.onload = () => {
-    const playlistTuples = window.soapi.listLocalPlaylists(CONFIG_DIR_YT_PLAYLISTS);
-    playlistTuples.forEach(tuple => {
+    const playlistTuples = window.soapi.listLocalPlaylists(window.soapi.CONFIG_DIR_YT_PLAYLISTS);
+    playlistTuples.forEach(plId => {
         const newLi = document.createElement('li');
-        newLi.innerHTML = tuple['title'];
+        newLi.innerHTML = plId;
         playlistUl?.appendChild(newLi);
     });
 };
+export {};
 //# sourceMappingURL=renderer.js.map

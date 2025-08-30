@@ -1,21 +1,11 @@
-"use strict";
 /**
  * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.extractVideoIdFromUrl = extractVideoIdFromUrl;
-exports.writeLocalPlaylist = writeLocalPlaylist;
-exports.addVideoToLocalPlaylist = addVideoToLocalPlaylist;
-exports.writeDataToLocalPlaylist = writeDataToLocalPlaylist;
-exports.removeVideoFromLocalPlaylist = removeVideoFromLocalPlaylist;
-exports.getLocalPlaylistPathFromId = getLocalPlaylistPathFromId;
-exports.readAndParseLocalPlaylist = readAndParseLocalPlaylist;
-exports.listLocalPlaylists = listLocalPlaylists;
-const fs = require('fs');
-const path = require('path');
-const logger = require('../logger.js');
-const { getNameFor } = require('../helpers.js');
-function extractVideoIdFromUrl(videoUrl) {
+import fs from 'fs';
+import path from 'path';
+import logger from '../logger.js';
+import { getNameFor } from '../helpers.js';
+export function extractVideoIdFromUrl(videoUrl) {
     // esse regex obtém tudo que vem depois de 'v=', mas para de obter caracteres se encontrar um '&' ou chegar ao fim da string
     // o que resta disso é o id do vídeo, que geralmente fica depois de watch?v=
     // o & pode aparecer na url caso o link do vídeo tenha sido copiado a partir de uma playlist ou tenha um timestamp na url
@@ -38,7 +28,7 @@ function extractVideoIdFromUrl(videoUrl) {
         return null;
     }
 }
-function writeLocalPlaylist(dirYtPlaylists, id, title, description, videoUrls) {
+export function writeLocalPlaylist(dirYtPlaylists, id, title, description, videoUrls) {
     /**
      * gera, escreve e cria o arquivo que vai representar uma playlist
      *
@@ -73,7 +63,7 @@ function writeLocalPlaylist(dirYtPlaylists, id, title, description, videoUrls) {
     );
     fs.writeFileSync(savePath, plDataString, 'utf-8');
 }
-function addVideoToLocalPlaylist(filePlaylist, videoUrl) {
+export function addVideoToLocalPlaylist(filePlaylist, videoUrl) {
     const videoId = extractVideoIdFromUrl(videoUrl);
     if (!videoId) {
         logger.error({ prefix: videoUrl, msg: `Error while extracting video ID`, details: `video ID not found` });
@@ -91,7 +81,7 @@ function addVideoToLocalPlaylist(filePlaylist, videoUrl) {
     writeDataToLocalPlaylist(plDataObject, filePlaylist);
     logger.success({ prefix: videoId, msg: 'Added video ID to playlist' });
 }
-function writeDataToLocalPlaylist(data, filePlaylist) {
+export function writeDataToLocalPlaylist(data, filePlaylist) {
     /**
      * sobreescreve os dados dentro de uma playlist
      * usadas principalmente pra adicionar e remover vídeos
@@ -101,7 +91,7 @@ function writeDataToLocalPlaylist(data, filePlaylist) {
     const formattedData = JSON.stringify(data, null, 4); // passar o objeto pra formato de texto e usar 4 espaços pra indentação
     fs.writeFileSync(filePlaylist, formattedData, 'utf-8'); // sobreescrever o arquivo com as novas informações
 }
-function removeVideoFromLocalPlaylist(filePlaylist, videoUrl) {
+export function removeVideoFromLocalPlaylist(filePlaylist, videoUrl) {
     const plData = readAndParseLocalPlaylist(filePlaylist);
     const targetVideoId = extractVideoIdFromUrl(videoUrl);
     // remover todas as ocorrências que sejam iguais a url do vídeo passado pra função
@@ -110,7 +100,7 @@ function removeVideoFromLocalPlaylist(filePlaylist, videoUrl) {
     plData['videos'] = updatedVideos;
     writeDataToLocalPlaylist(plData, filePlaylist);
 }
-function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
+export function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
     // primeiro, tentar obter o arquivo da playlist apenas pelo nome
     // isso pode falhar caso o usuário tenha mudado manualmente o nome do arquivo ou caso ele só não exista
     let plPath = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(playlistId));
@@ -146,7 +136,7 @@ function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
         logger.error({ prefix: playlistId, msg: `Could not find any playlists with this ID` });
     }
 }
-function readAndParseLocalPlaylist(filePlaylist) {
+export function readAndParseLocalPlaylist(filePlaylist) {
     /**
      * lê o conteúdo de um arquivo que representa uma playlist
      * e retorna o texto convertido em um objeto
@@ -164,31 +154,30 @@ function readAndParseLocalPlaylist(filePlaylist) {
         throw err;
     }
 }
-function listLocalPlaylists(dirYtPlaylists) {
-    logger.info({ msg: 'Reading local playlists' });
-    // ler o diretório e inicializar um array de tuplas vazio pra guardar as playlists obtidas
+export function listLocalPlaylists(dirYtPlaylists) {
+    logger.info({ msg: 'Listing local playlists' });
+    // ler o diretório e inicializar um array de tuplas vazio pra guardar os dados das playlists obtidas
     const allPlaylists = fs.readdirSync(dirYtPlaylists, { withFileTypes: true });
-    const onlyLocalPlaylists = [];
+    const onlyLocalPlaylists = []; // id e título
     allPlaylists.forEach((filePl) => {
         // adicionar apenas as playlists definidas como locais no array final
         const fullPlPath = path.join(dirYtPlaylists, filePl.name);
         const plContents = readAndParseLocalPlaylist(fullPlPath);
         const plType = plContents['type'];
         if (plType == 'local') {
-            onlyLocalPlaylists.push([plContents['id'], plContents['title']]);
+            onlyLocalPlaylists.push(plContents['id']);
         }
     });
-    // retornar os resultados
+    // imprimir e retornar os resultados
     if (onlyLocalPlaylists.length > 0) {
-        // obter apenas a coluna com os títulos das playlists
-        const playlistTitles = onlyLocalPlaylists.map(tuple => tuple[1]);
         logger.success({
             msg: `Finished reading local playlists. You have ${onlyLocalPlaylists.length} of them`,
-            details: playlistTitles
+            details: onlyLocalPlaylists
         });
     }
     else {
         logger.success({ msg: 'Finished reading local playlists. You don\'t have any of them' });
     }
+    return onlyLocalPlaylists;
 }
 //# sourceMappingURL=youtube.js.map

@@ -2,12 +2,11 @@
  * toda vez que algo é referenciado como "playlist" significa o ARQUIVO QUE REPRESENTA AQUELA PLAYLIST, seja ela local ou remota
  */
 
-const fs = require('fs');
-const path = require('path');
-const logger = require('../logger.js');
-const { getNameFor } = require('../helpers.js');
+import fs from 'fs';
+import path from 'path';
+import logger from '../logger.js';
+import { getNameFor } from '../helpers.js';
 import type { PlaylistDataObject } from '../data.js';
-import type { Dirent } from 'fs'; // sem isso não dá pra usar o tipo só com fs.Dirent
 
 export function extractVideoIdFromUrl(videoUrl: string): string | null {
     // esse regex obtém tudo que vem depois de 'v=', mas para de obter caracteres se encontrar um '&' ou chegar ao fim da string
@@ -185,36 +184,33 @@ export function readAndParseLocalPlaylist(filePlaylist: string): PlaylistDataObj
     }
 }
 
-export function listLocalPlaylists(dirYtPlaylists: string) {
-    logger.info({ msg: 'Reading local playlists' });
+export function listLocalPlaylists(dirYtPlaylists: string): string[] {
+    logger.info({ msg: 'Listing local playlists' });
 
-    // ler o diretório e inicializar um array de tuplas vazio pra guardar as playlists obtidas
-    const allPlaylists = fs.readdirSync(dirYtPlaylists, { withFileTypes: true });
-    const onlyLocalPlaylists: [string, string][] = [];
+    // ler o diretório e inicializar um array de tuplas vazio pra guardar os dados das playlists obtidas
+    const allPlaylists: fs.Dirent[] = fs.readdirSync(dirYtPlaylists, { withFileTypes: true });
+    const onlyLocalPlaylists: string[] = []; // id e título
 
-    allPlaylists.forEach((filePl: Dirent) => {
+    allPlaylists.forEach((filePl) => {
         // adicionar apenas as playlists definidas como locais no array final
         const fullPlPath = path.join(dirYtPlaylists, filePl.name);
         const plContents = readAndParseLocalPlaylist(fullPlPath);
         
         const plType = plContents['type'];
         if (plType == 'local') {
-            onlyLocalPlaylists.push(
-                [plContents['id'], plContents['title']]
-            );
+            onlyLocalPlaylists.push(plContents['id'])
         }
     });
 
-    // retornar os resultados
+    // imprimir e retornar os resultados
     if (onlyLocalPlaylists.length > 0) {
-        // obter apenas a coluna com os títulos das playlists
-        const playlistTitles = onlyLocalPlaylists.map(tuple => tuple[1]);
-
         logger.success({
             msg: `Finished reading local playlists. You have ${onlyLocalPlaylists.length} of them`,
-            details: playlistTitles
+            details: onlyLocalPlaylists
         });
     } else {
         logger.success({ msg: 'Finished reading local playlists. You don\'t have any of them' });
     }
+
+    return onlyLocalPlaylists;
 }

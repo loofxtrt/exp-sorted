@@ -1,6 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const chalk = require('chalk');
+import chalk from 'chalk';
 function baseLog({ level = 'text', prefix = undefined, msg, details = undefined }) {
     /**
      * imprime mensagens de log no terminal
@@ -110,8 +108,7 @@ function warn({ prefix, msg, details }) {
         details: details
     });
 }
-// module.exports em vez export defaults pra seguir o commonjs
-module.exports = {
+export default {
     success,
     error,
     info,

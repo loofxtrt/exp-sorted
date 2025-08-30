@@ -1,8 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getNameFor = void 0;
-exports.generateRandomId = generateRandomId;
-exports.getNameFor = {
+export const getNameFor = {
     youtubeLocalPlaylist(playlistId) {
         return `youtube.playlist.local.${playlistId}.json`;
     },
@@ -10,7 +6,7 @@ exports.getNameFor = {
         return `youtube.playlist.service.${playlistId}.json`;
     }
 };
-function generateRandomId(idLength) {
+export function generateRandomId(idLength) {
     // variáveis pra definir quais caracteres vão ser usados e inicializar o id vazio
     const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let finalId = '';

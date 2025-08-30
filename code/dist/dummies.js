@@ -1,10 +1,6 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.words = exports.videoUrls = void 0;
-exports.createTestPlaylist = createTestPlaylist;
-const { writeLocalPlaylist } = require('./interact/youtube.js');
-const { generateRandomId } = require('./helpers.js');
-function createTestPlaylist(dirYtPlaylists, idLength) {
+import { writeLocalPlaylist } from "./interact/youtube.js";
+import { generateRandomId } from "./helpers.js";
+export function createTestPlaylist(dirYtPlaylists, idLength) {
     // gerar números aleatórios
     // randomnumber é genérico e serve pra definir a quantidade/length de algo
     // o randomindex serve pra pegar um número aleatório que esteja dentro do limite de um array específico
@@ -21,20 +17,20 @@ function createTestPlaylist(dirYtPlaylists, idLength) {
     // gerar um index aleatório baseado no tamanho do array que é o target
     // acessar o valor desse index no array, e adicionar o valor a respectiva variável
     while (titleWordCount > 0) {
-        const randIndex = randomIndexFromArray(exports.words);
-        const word = exports.words[randIndex];
+        const randIndex = randomIndexFromArray(words);
+        const word = words[randIndex];
         title += word + ' ';
         titleWordCount -= 1;
     }
     while (descWordCount > 0) {
-        const randIndex = randomIndexFromArray(exports.words);
-        const word = exports.words[randIndex];
+        const randIndex = randomIndexFromArray(words);
+        const word = words[randIndex];
         desc += word + ' ';
         descWordCount -= 1;
     }
     while (videoCount > 0) {
-        const randIndex = randomIndexFromArray(exports.videoUrls);
-        const url = exports.videoUrls[randIndex];
+        const randIndex = randomIndexFromArray(videoUrls);
+        const url = videoUrls[randIndex];
         if (!url) {
             continue;
         }
@@ -45,7 +41,7 @@ function createTestPlaylist(dirYtPlaylists, idLength) {
     writeLocalPlaylist(dirYtPlaylists, generateRandomId(idLength), title, desc, videos);
 }
 // https://perchance.org/youtube-video
-exports.videoUrls = [
+export const videoUrls = [
     'youtube.com/watch?v=bG9b2ygozJY',
     'youtube.com/watch?v=aXQDo6BAgbA',
     'youtube.com/watch?v=YjNdxk6vxs4',
@@ -97,7 +93,7 @@ exports.videoUrls = [
     'youtube.com/watch?v=z_UXrgQxGrM',
     'youtube.com/watch?v=-3VRVfLTRT8'
 ];
-exports.words = [
+export const words = [
     'casa',
     'carro',
     'árvore',
