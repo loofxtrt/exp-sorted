@@ -180,7 +180,7 @@ export function readAndParseLocalPlaylist(filePlaylist: string): PlaylistDataObj
     }
 }
 
-export function listLocalPlaylists(dirYtPlaylists: string): string[] {
+export function listLocalPlaylistsIds(dirYtPlaylists: string): string[] {
     logger.info({ msg: 'Listing local playlists' });
 
     // ler o diretório e inicializar um array de tuplas vazio pra guardar os dados das playlists obtidas
@@ -198,7 +198,7 @@ export function listLocalPlaylists(dirYtPlaylists: string): string[] {
         }
     });
 
-    // imprimir e retornar os resultados
+    // logging
     if (onlyLocalPlaylists.length > 0) {
         logger.success({
             msg: `Finished reading local playlists. You have ${onlyLocalPlaylists.length} of them`,
@@ -211,7 +211,9 @@ export function listLocalPlaylists(dirYtPlaylists: string): string[] {
     return onlyLocalPlaylists;
 }
 
-export function getPlaylistInfoById(dirYtPlaylists: string, playlistId: string, targetInfo: keyof PlaylistDataObject) {
+export function getPlaylistDataById(dirYtPlaylists: string, playlistId: string): PlaylistDataObject {
     const plFile = getLocalPlaylistPathFromId(dirYtPlaylists, playlistId);
     const plData = readAndParseLocalPlaylist(plFile);
+
+    return plData;
 }

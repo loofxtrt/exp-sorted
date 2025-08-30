@@ -6,7 +6,7 @@ declare global {
     interface Window {
         soapi: {
             CONFIG_DIR_YT_PLAYLISTS: string,
-            listLocalPlaylists: (dirYtPlaylists: string) => string[];
+            listLocalPlaylistsIds: (dirYtPlaylists: string) => string[];
         }
     }
 }

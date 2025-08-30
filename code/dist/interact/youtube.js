@@ -149,7 +149,7 @@ export function readAndParseLocalPlaylist(filePlaylist) {
         throw err;
     }
 }
-export function listLocalPlaylists(dirYtPlaylists) {
+export function listLocalPlaylistsIds(dirYtPlaylists) {
     logger.info({ msg: 'Listing local playlists' });
     // ler o diretório e inicializar um array de tuplas vazio pra guardar os dados das playlists obtidas
     const allPlaylists = fs.readdirSync(dirYtPlaylists, { withFileTypes: true });
@@ -163,7 +163,7 @@ export function listLocalPlaylists(dirYtPlaylists) {
             onlyLocalPlaylists.push(plContents['id']);
         }
     });
-    // imprimir e retornar os resultados
+    // logging
     if (onlyLocalPlaylists.length > 0) {
         logger.success({
             msg: `Finished reading local playlists. You have ${onlyLocalPlaylists.length} of them`,
@@ -175,8 +175,9 @@ export function listLocalPlaylists(dirYtPlaylists) {
     }
     return onlyLocalPlaylists;
 }
-export function getPlaylistInfoById(dirYtPlaylists, playlistId, targetInfo) {
+export function getPlaylistDataById(dirYtPlaylists, playlistId) {
     const plFile = getLocalPlaylistPathFromId(dirYtPlaylists, playlistId);
     const plData = readAndParseLocalPlaylist(plFile);
+    return plData;
 }
 //# sourceMappingURL=youtube.js.map
