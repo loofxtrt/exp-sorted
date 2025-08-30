@@ -1,6 +1,6 @@
 "use strict";
+//const { CONFIG_DIR_YT_PLAYLISTS } = require('../data.js');
 Object.defineProperty(exports, "__esModule", { value: true });
-const { CONFIG_DIR_YT_PLAYLISTS } = require('../data.js');
 const playlistUl = document.querySelector('ul#playlist-list');
 window.onload = () => {
     const playlistTuples = window.soapi.listLocalPlaylists(CONFIG_DIR_YT_PLAYLISTS);
