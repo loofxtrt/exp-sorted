@@ -1,1 +1,0 @@
-chalk 5 é esm only, pra usar com commonjs precisa ser o 4

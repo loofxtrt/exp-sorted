@@ -59,14 +59,19 @@ export function writeLocalPlaylist(dirYtPlaylists, id, title, description, video
     };
     const plDataString = JSON.stringify(plDataObject, null, 4);
     // escrever o arquivo final
-    const savePath = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
-    );
-    fs.writeFileSync(savePath, plDataString, 'utf-8');
+    try {
+        const savePath = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
+        );
+        fs.writeFileSync(savePath, plDataString, 'utf-8');
+    }
+    catch (err) {
+        console.error(err);
+    }
 }
 export function addVideoToLocalPlaylist(filePlaylist, videoUrl) {
     const videoId = extractVideoIdFromUrl(videoUrl);
     if (!videoId) {
-        logger.error({ prefix: videoUrl, msg: `Error while extracting video ID`, details: `video ID not found` });
+        logger.error({ prefix: videoUrl, msg: `Could not add video to local playlist`, details: `video ID not found` });
         return;
     }
     // ler o arquivo passado e converter os dados de string pra objeto
@@ -108,33 +113,23 @@ export function getLocalPlaylistPathFromId(dirYtPlaylists, playlistId) {
         logger.success({ prefix: playlistId, msg: `Found playlist ID in the file name of the playlist` });
         return plPath;
     }
-    else {
-        // se não achar a playlist pelo nome, zera o plpath e tenta achar o id dentro do conteúdo de cada arquivo de playlist existente
-        // se ainda assim não achar, dá erro e para a busca, deixando plpath vazio pra indicar o erro
-        plPath = undefined;
-        const allPlaylistFiles = fs.readdirSync(dirYtPlaylists, { withFileTypes: true }); // ler o dir mantendo os tipos dos arquivos
-        for (const plFile of allPlaylistFiles) {
-            if (!plFile.isFile())
-                return;
-            // converter o arquivo pra um path completo e ler ele
-            const thisPlaylist = path.join(dirYtPlaylists, plFile.name);
-            const plObject = readAndParseLocalPlaylist(thisPlaylist);
-            // verificar se o id que está sendo procurado tá no conteúdo
-            // for tradicional ao invés de foreach pra poder usar o break
-            if (plObject['id'] === playlistId) {
-                plPath = thisPlaylist;
-                logger.success({ prefix: playlistId, msg: `Found playlist ID inside the contents of ${plFile.name}` });
-                break;
-            }
+    // se não achar a playlist pelo nome, tenta achar o id dentro do conteúdo de cada arquivo de playlist existente
+    const allPlaylistFiles = fs.readdirSync(dirYtPlaylists, { withFileTypes: true }); // ler o dir mantendo os tipos dos arquivos
+    for (const plFile of allPlaylistFiles) {
+        // for tradicional ao invés de foreach pra poder usar o continue
+        if (!plFile.isFile())
+            continue;
+        // converter o arquivo pra um path completo e ler ele
+        const thisPlaylist = path.join(dirYtPlaylists, plFile.name);
+        const plObject = readAndParseLocalPlaylist(thisPlaylist);
+        // verificar se o id que está sendo procurado tá no conteúdo
+        if (plObject['id'] === playlistId) {
+            logger.success({ prefix: playlistId, msg: `Found playlist ID inside the contents of ${plFile.name}` });
+            return thisPlaylist;
         }
     }
-    // se o plpath for uma string e não estiver vazio, significa que o arquivo da playlist foi encontrado
-    if (typeof plPath === 'string' && plPath.trim() != '') {
-        return plPath;
-    }
-    else {
-        logger.error({ prefix: playlistId, msg: `Could not find any playlists with this ID` });
-    }
+    // lançar um erro se não encontrar nada
+    throw new Error(`Could not find any playlists with ID: ${playlistId}`);
 }
 export function readAndParseLocalPlaylist(filePlaylist) {
     /**
@@ -179,5 +174,9 @@ export function listLocalPlaylists(dirYtPlaylists) {
         logger.success({ msg: 'Finished reading local playlists. You don\'t have any of them' });
     }
     return onlyLocalPlaylists;
+}
+export function getPlaylistInfoById(dirYtPlaylists, playlistId, targetInfo) {
+    const plFile = getLocalPlaylistPathFromId(dirYtPlaylists, playlistId);
+    const plData = readAndParseLocalPlaylist(plFile);
 }
 //# sourceMappingURL=youtube.js.map

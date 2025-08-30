@@ -4,11 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sorted Experimental</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main>
         <div id="content-view">
-            <ul id="playlist-list"></ul>
+            <label for="content-list" id="content-label">Folder name</label>
+            <ul id="content-list">
+                <!--
+                <div class="playlist-row">
+                    <input type="checkbox" name="select-playlist" id="select-playlist">
+                    
+                    <div class="row-content">
+                        <p class="title">${plId}</p>
+                        <p class="description">Lorem Ipsum</p>
+                        <p class="type">Local</p>
+                    </div>
+                </div>
+                -->
+            </ul>
+        </div>
+
+        <div class="actions">
+            <button id="add-new-playlist">Create playlist</button>
+            <button id="delete-playlist">Delete playlist</button>
         </div>
     </main>
 

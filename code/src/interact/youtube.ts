@@ -69,18 +69,22 @@ export function writeLocalPlaylist(dirYtPlaylists: string, id: string, title: st
     const plDataString = JSON.stringify(plDataObject, null, 4);
 
     // escrever o arquivo final
-    const savePath = path.join(
-        dirYtPlaylists,
-        getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
-    );
-    fs.writeFileSync(savePath, plDataString, 'utf-8');
+    try {
+        const savePath = path.join(
+            dirYtPlaylists,
+            getNameFor.youtubeLocalPlaylist(id) // gerar o nome com a convenção correta definida pelo software
+        );
+        fs.writeFileSync(savePath, plDataString, 'utf-8');
+    } catch (err) {
+        console.error(err);
+    }
 }
 
 export function addVideoToLocalPlaylist(filePlaylist: string, videoUrl: string) {
     const videoId = extractVideoIdFromUrl(videoUrl);
     
     if (!videoId) {
-        logger.error({ prefix: videoUrl, msg: `Error while extracting video ID`, details: `video ID not found` });
+        logger.error({ prefix: videoUrl, msg: `Could not add video to local playlist`, details: `video ID not found` });
         return;
     }
 
@@ -124,44 +128,36 @@ export function removeVideoFromLocalPlaylist(filePlaylist: string, videoUrl: str
     writeDataToLocalPlaylist(plData, filePlaylist);
 }
 
-export function getLocalPlaylistPathFromId(dirYtPlaylists: string, playlistId: string): string | undefined {     
+export function getLocalPlaylistPathFromId(dirYtPlaylists: string, playlistId: string): string {     
     // primeiro, tentar obter o arquivo da playlist apenas pelo nome
     // isso pode falhar caso o usuário tenha mudado manualmente o nome do arquivo ou caso ele só não exista
-    let plPath: string | undefined = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(playlistId));
+    let plPath: string = path.join(dirYtPlaylists, getNameFor.youtubeLocalPlaylist(playlistId));
     
     if (fs.existsSync(plPath)) {
         logger.success({ prefix: playlistId, msg: `Found playlist ID in the file name of the playlist` });
         return plPath;
-    } else {
-        // se não achar a playlist pelo nome, zera o plpath e tenta achar o id dentro do conteúdo de cada arquivo de playlist existente
-        // se ainda assim não achar, dá erro e para a busca, deixando plpath vazio pra indicar o erro
-        plPath = undefined
-        const allPlaylistFiles = fs.readdirSync(dirYtPlaylists, { withFileTypes: true}); // ler o dir mantendo os tipos dos arquivos
+    }
 
-        for (const plFile of allPlaylistFiles) {
-            if (!plFile.isFile()) return;
+    // se não achar a playlist pelo nome, tenta achar o id dentro do conteúdo de cada arquivo de playlist existente
+    const allPlaylistFiles = fs.readdirSync(dirYtPlaylists, { withFileTypes: true}); // ler o dir mantendo os tipos dos arquivos
 
-            // converter o arquivo pra um path completo e ler ele
-            const thisPlaylist = path.join(dirYtPlaylists, plFile.name);
-            const plObject = readAndParseLocalPlaylist(thisPlaylist);
-            
-            // verificar se o id que está sendo procurado tá no conteúdo
-            // for tradicional ao invés de foreach pra poder usar o break
-            if (plObject['id'] === playlistId) {
-                plPath = thisPlaylist;
+    for (const plFile of allPlaylistFiles) {
+        // for tradicional ao invés de foreach pra poder usar o continue
+        if (!plFile.isFile()) continue;
 
-                logger.success({ prefix: playlistId, msg: `Found playlist ID inside the contents of ${plFile.name}` });
-                break;
-            }
+        // converter o arquivo pra um path completo e ler ele
+        const thisPlaylist = path.join(dirYtPlaylists, plFile.name);
+        const plObject = readAndParseLocalPlaylist(thisPlaylist);
+        
+        // verificar se o id que está sendo procurado tá no conteúdo
+        if (plObject['id'] === playlistId) {
+            logger.success({ prefix: playlistId, msg: `Found playlist ID inside the contents of ${plFile.name}` });
+            return thisPlaylist;
         }
     }
 
-    // se o plpath for uma string e não estiver vazio, significa que o arquivo da playlist foi encontrado
-    if (typeof plPath === 'string' && plPath.trim() != '') {
-        return plPath;
-    } else {
-        logger.error({ prefix: playlistId, msg: `Could not find any playlists with this ID` });
-    }
+    // lançar um erro se não encontrar nada
+    throw new Error(`Could not find any playlists with ID: ${playlistId}`);
 }
 
 export function readAndParseLocalPlaylist(filePlaylist: string): PlaylistDataObject {
@@ -213,4 +209,9 @@ export function listLocalPlaylists(dirYtPlaylists: string): string[] {
     }
 
     return onlyLocalPlaylists;
+}
+
+export function getPlaylistInfoById(dirYtPlaylists: string, playlistId: string, targetInfo: keyof PlaylistDataObject) {
+    const plFile = getLocalPlaylistPathFromId(dirYtPlaylists, playlistId);
+    const plData = readAndParseLocalPlaylist(plFile);
 }
