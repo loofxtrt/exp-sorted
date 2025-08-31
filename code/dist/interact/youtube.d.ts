@@ -10,5 +10,5 @@ export declare function removeVideoFromLocalPlaylist(filePlaylist: string, video
 export declare function getLocalPlaylistPathFromId(dirYtPlaylists: string, playlistId: string): string;
 export declare function readAndParseLocalPlaylist(filePlaylist: string): PlaylistDataObject;
 export declare function listLocalPlaylistsIds(dirYtPlaylists: string): string[];
-export declare function getPlaylistDataById(dirYtPlaylists: string, playlistId: string): PlaylistDataObject;
+export declare function getPlaylistDataValueById(dirYtPlaylists: string, playlistId: string, objectKey: keyof PlaylistDataObject): string | string[];
 //# sourceMappingURL=youtube.d.ts.map

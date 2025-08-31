@@ -17,7 +17,8 @@ export let CONFIG_DIR_YT_PLAYLISTS: string = '';
 
 export interface PlaylistDataObject {
     id: string,
-    type: 'local' | 'service',
+    type: 'playlist',
+    family: 'local' | 'remote',
     title: string,
     description: string,
     videos: string[]

@@ -14,4 +14,4 @@ function requireTestPlaylists(playlistCount: number = 10) {
     }
 }
 
-//requireTestPlaylists();
+requireTestPlaylists();

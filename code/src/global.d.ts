@@ -1,3 +1,5 @@
+import { PlaylistDataObject } from "./data.ts";
+
 export {}; // declarar o arquivo como módulo
 
 declare global {
@@ -6,7 +8,8 @@ declare global {
     interface Window {
         soapi: {
             CONFIG_DIR_YT_PLAYLISTS: string,
-            listLocalPlaylistsIds: (dirYtPlaylists: string) => string[];
+            CALL_listLocalPlaylistsIds: (dirYtPlaylists: string) => string[];
+            CALL_getPlaylistDataValueById: (dirYtPlaylists: string, playlistId: string, objectKey: keyof PlaylistDataObject) => string | string[]
         }
     }
 }

@@ -4,6 +4,16 @@
     padding: 0;
 }
 
+
+/* google icons */
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 200,
+  'GRAD' 0,
+  'opsz' 24
+}
+
 body {
     margin: 15px;
 }
@@ -28,4 +38,14 @@ ul > li {
     border: 1px solid gray;
     padding: 10px;
     border-radius: 2px;
+}
+
+.playlist-row .thumbnail {
+    width: 100px;
+    height: min-content;
+}
+
+.thumbnail {
+    border: 1px solid gray;
+    border-radius: 5px;
 }

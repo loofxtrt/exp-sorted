@@ -11,5 +11,5 @@ function requireTestPlaylists(playlistCount = 10) {
         playlistCount -= 1;
     }
 }
-//requireTestPlaylists();
+requireTestPlaylists();
 //# sourceMappingURL=headless.js.map

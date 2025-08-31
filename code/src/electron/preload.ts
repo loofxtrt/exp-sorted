@@ -1,9 +1,20 @@
 import { contextBridge } from 'electron';
-import { listLocalPlaylistsIds } from '../interact/youtube.js';
-import { CONFIG_DIR_YT_PLAYLISTS } from '../data.js';
+import { getPlaylistDataValueById, listLocalPlaylistsIds } from '../interact/youtube.js';
+import { CONFIG_DIR_YT_PLAYLISTS, PlaylistDataObject } from '../data.js';
 
 contextBridge.exposeInMainWorld('soapi', {
     // listar aqui as variáveis e funções que o renderer deve ter acesso
+    // também devem ser definidas no global.d.ts
+    // * a maioria das funções aqui não recebem args prontos, o renderer que tem que passar pra elas
+    // * o prefixo call é atribuido a elas pra que elas nao sejam confundidas com as funções originais
+    
     CONFIG_DIR_YT_PLAYLISTS,
-    listLocalPlaylistsIds: (dirYtPlaylists: string) => listLocalPlaylistsIds(dirYtPlaylists)
+
+    CALL_listLocalPlaylistsIds(dirYtPlaylists: string) {
+        return listLocalPlaylistsIds(dirYtPlaylists);
+    },
+    
+    CALL_getPlaylistDataValueById(dirYtPlaylists: string, playlistId: string, objectKey: keyof PlaylistDataObject) {
+        return getPlaylistDataValueById(dirYtPlaylists, playlistId, objectKey);
+    }
 });

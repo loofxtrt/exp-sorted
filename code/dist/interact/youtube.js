@@ -52,7 +52,8 @@ export function writeLocalPlaylist(dirYtPlaylists, id, title, description, video
     // e logo depois converter pra um json com 4 espaços de indentação
     const plDataObject = {
         'id': id,
-        'type': 'local',
+        'type': 'playlist',
+        'family': 'local',
         'title': title,
         'description': description,
         'videos': cleanUrls
@@ -158,8 +159,8 @@ export function listLocalPlaylistsIds(dirYtPlaylists) {
         // adicionar apenas as playlists definidas como locais no array final
         const fullPlPath = path.join(dirYtPlaylists, filePl.name);
         const plContents = readAndParseLocalPlaylist(fullPlPath);
-        const plType = plContents['type'];
-        if (plType == 'local') {
+        const plFamily = plContents['family'];
+        if (plFamily == 'local') {
             onlyLocalPlaylists.push(plContents['id']);
         }
     });
@@ -175,9 +176,10 @@ export function listLocalPlaylistsIds(dirYtPlaylists) {
     }
     return onlyLocalPlaylists;
 }
-export function getPlaylistDataById(dirYtPlaylists, playlistId) {
+export function getPlaylistDataValueById(dirYtPlaylists, playlistId, objectKey) {
     const plFile = getLocalPlaylistPathFromId(dirYtPlaylists, playlistId);
     const plData = readAndParseLocalPlaylist(plFile);
-    return plData;
+    const plValue = plData[objectKey];
+    return plValue;
 }
 //# sourceMappingURL=youtube.js.map

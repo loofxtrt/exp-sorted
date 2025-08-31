@@ -1,4 +1,8 @@
-window.onload = () => {    
+import { PlaylistDataObject } from "../data.js";
+
+window.onload = () => {
+    const playlistDirectory = window.soapi.CONFIG_DIR_YT_PLAYLISTS
+
     const contentUl = document.querySelector('ul#content-list');
     const contentLabel = document.querySelector('label#content-label');
 
@@ -7,20 +11,43 @@ window.onload = () => {
     }
 
     // listar o id de todas as playlists obtidas via api
-    const playlists = window.soapi.listLocalPlaylistsIds(window.soapi.CONFIG_DIR_YT_PLAYLISTS);
+    const playlistIds = window.soapi.CALL_listLocalPlaylistsIds(playlistDirectory);
 
-    playlists.forEach(plObject => {
-        const id = plObject;
-
+    playlistIds.forEach(plId => {
+        // obter os valores restantes da playlist atual com base no id dela
+        function getValueFromThisPl(targetValue: keyof PlaylistDataObject): string | string[] {
+            return window.soapi.CALL_getPlaylistDataValueById(playlistDirectory, plId, targetValue);
+        }
+        
+        const title = getValueFromThisPl('title');
+        const description = getValueFromThisPl('description');
+        const videos = getValueFromThisPl('videos');    
+        const family = getValueFromThisPl('family');
+        const videoCount = videos.length;
+        
+        // criar o row da playlist
         const newLi = document.createElement('li');
         newLi.innerHTML = `
-        <div class="playlist-row">
+        <div class="playlist-row" data-playlist-id="${plId}">
             <input type="checkbox" name="select-playlist" id="select-playlist">
             
-            <div class="row-content">
-                <p class="title">${id}</p>
-                <p class="description">Lorem Ipsum</p>
-                <p class="type">Local</p>
+            <img src="../../assets/thumbnail-placeholder.svg" alt="thumbnail" class="thumbnail">
+
+            <div class="row-contents">
+                <p class="title">${title}</p>
+                <p class="description">${description}</p>
+
+                <div class="footer-info">
+                    <span class="video-count">
+                        <span class="material-symbols-outlined">movie</span>
+                        ${videoCount} videos
+                    </span>
+
+                    <span class="family">
+                        <span class="material-symbols-outlined">hard_drive_2</span>
+                        ${family}
+                    </span>
+                </div>
             </div>
         </div>
         `;

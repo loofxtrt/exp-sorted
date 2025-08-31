@@ -61,7 +61,8 @@ export function writeLocalPlaylist(dirYtPlaylists: string, id: string, title: st
     // e logo depois converter pra um json com 4 espaços de indentação
     const plDataObject = {
         'id': id,
-        'type': 'local',
+        'type': 'playlist',
+        'family': 'local',
         'title': title,
         'description': description,
         'videos': cleanUrls
@@ -192,8 +193,8 @@ export function listLocalPlaylistsIds(dirYtPlaylists: string): string[] {
         const fullPlPath = path.join(dirYtPlaylists, filePl.name);
         const plContents = readAndParseLocalPlaylist(fullPlPath);
         
-        const plType = plContents['type'];
-        if (plType == 'local') {
+        const plFamily = plContents['family'];
+        if (plFamily == 'local') {
             onlyLocalPlaylists.push(plContents['id'])
         }
     });
@@ -211,9 +212,11 @@ export function listLocalPlaylistsIds(dirYtPlaylists: string): string[] {
     return onlyLocalPlaylists;
 }
 
-export function getPlaylistDataById(dirYtPlaylists: string, playlistId: string): PlaylistDataObject {
+export function getPlaylistDataValueById(dirYtPlaylists: string, playlistId: string, objectKey: keyof PlaylistDataObject): string | string[] {
     const plFile = getLocalPlaylistPathFromId(dirYtPlaylists, playlistId);
     const plData = readAndParseLocalPlaylist(plFile);
 
-    return plData;
+    const plValue = plData[objectKey];
+
+    return plValue;
 }
