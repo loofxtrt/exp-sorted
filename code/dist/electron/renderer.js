@@ -1,16 +1,16 @@
-window.onload = () => {
-    const playlistDirectory = window.soapi.CONFIG_DIR_YT_PLAYLISTS;
+function loadDirectoryView(directory) {
     const contentUl = document.querySelector('ul#content-list');
     const contentLabel = document.querySelector('label#content-label');
+    // exibir o nome da pasta
     if (contentLabel) {
         contentLabel.innerHTML = '@playlists';
     }
     // listar o id de todas as playlists obtidas via api
-    const playlistIds = window.soapi.CALL_listLocalPlaylistsIds(playlistDirectory);
+    const playlistIds = window.soapi.CALL_listLocalPlaylistsIds(directory);
     playlistIds.forEach(plId => {
-        // obter os valores restantes da playlist atual com base no id dela
+        // obter os outros valores da playlist atual com base no id dela
         function getValueFromThisPl(targetValue) {
-            return window.soapi.CALL_getPlaylistDataValueById(playlistDirectory, plId, targetValue);
+            return window.soapi.CALL_getPlaylistDataValueById(directory, plId, targetValue);
         }
         const title = getValueFromThisPl('title');
         const description = getValueFromThisPl('description');
@@ -27,17 +27,22 @@ window.onload = () => {
 
             <div class="row-contents">
                 <p class="title">${title}</p>
-                <p class="description">${description}</p>
+                <p class="description trivial-text">${description}</p>
 
                 <div class="footer-info">
                     <span class="video-count">
-                        <span class="material-symbols-outlined">movie</span>
+                        <span class="material-symbols-outlined">bookmark</span>
                         ${videoCount} videos
                     </span>
 
                     <span class="family">
-                        <span class="material-symbols-outlined">hard_drive_2</span>
+                        <span class="material-symbols-outlined">hard_drive</span>
                         ${family}
+                    </span>
+
+                    <span class="playlist-id">
+                        <span class="material-symbols-outlined">content_copy</span>
+                        copy id
                     </span>
                 </div>
             </div>
@@ -45,6 +50,10 @@ window.onload = () => {
         `;
         contentUl?.appendChild(newLi);
     });
+}
+window.onload = () => {
+    const playlistDirectory = window.soapi.CONFIG_DIR_YT_PLAYLISTS;
+    loadDirectoryView(playlistDirectory);
 };
 export {};
 //# sourceMappingURL=renderer.js.map

@@ -1,3 +1,6 @@
+import fs, { read } from 'fs';
+import path from 'path';
+
 export const getNameFor = {
     youtubeLocalPlaylist(playlistId: string) {
         return `youtube.playlist.local.${playlistId}.json`
@@ -27,3 +30,24 @@ export function generateRandomId(idLength: number): string {
     
     return finalId;
 }
+
+/* INCOMPLETO
+export function readDirAsObject(directory: string) {
+    // lê um diretório recursivamente e reconstrói a estrutura dele em um objeto
+    const results: any = {};
+    const items = fs.readdirSync(directory, { withFileTypes: true });
+
+    
+    items.forEach(i => {
+        const fileFullPath = path.join(directory, i.name);
+        
+        if (i.isDirectory()) {
+            results[i.name] = readDirAsObject(fileFullPath);
+        } else {
+            results[i.name] = null;
+        }
+    });
+
+    return results;
+}
+*/
