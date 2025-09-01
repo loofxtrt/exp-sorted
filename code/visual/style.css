@@ -34,20 +34,16 @@ ul > li {
     color: gray;
 }
 
-#main-container {
+#dashboard-container {
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 
-#file-tree {
-    width: 500px;
-    border-radius: 2px;
-    border: 1px solid gray;
-}
-
-#file-tree li, #file-tree ul {
-    padding-left: 20px;
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .playlist-row {
@@ -58,6 +54,9 @@ ul > li {
     border: 1px solid gray;
     padding: 10px;
     border-radius: 2px;
+
+    height: 100px;
+    align-items: center;
 }
 
 .playlist-row .thumbnail {
@@ -68,4 +67,30 @@ ul > li {
 .thumbnail {
     border: 1px solid gray;
     border-radius: 5px;
+}
+
+#actions {
+    position: sticky;
+    top: 10px;
+
+    /* espaço entre um grupo de botões */
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+
+    background-color: rgb(206, 206, 206);
+    border: 1px solid gray;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+#actions .button-group {
+    /* espaço entre os botões dentro de um grupo */
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#actions .material-symbols-outlined {
+    font-size: 18px;
 }

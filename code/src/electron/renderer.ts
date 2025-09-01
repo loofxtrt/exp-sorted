@@ -26,32 +26,33 @@ function loadDirectoryView(directory: string) {
         
         // criar o row da playlist
         const newLi = document.createElement('li');
+        newLi.className = 'playlist-row';
+        newLi.dataset.playlistId = plId; // adicionar o data-*, nesse caso o id da playlist que fica oculto visualmente
+        
         newLi.innerHTML = `
-        <div class="playlist-row" data-playlist-id="${plId}">
-            <input type="checkbox" name="select-playlist" id="select-playlist">
+        <input type="checkbox" name="select-playlist" id="select-playlist">
             
-            <img src="../../assets/thumbnail-placeholder.svg" alt="thumbnail" class="thumbnail">
+        <img src="../../assets/thumbnail-placeholder.svg" alt="thumbnail" class="thumbnail">
 
-            <div class="row-contents">
-                <p class="title">${title}</p>
-                <p class="description trivial-text">${description}</p>
+        <div class="row-contents">
+            <p class="title">${title}</p>
+            <p class="description trivial-text">${description}</p>
 
-                <div class="footer-info">
-                    <span class="video-count">
-                        <span class="material-symbols-outlined">bookmark</span>
-                        ${videoCount} videos
-                    </span>
+            <div class="footer-info">
+                <span class="video-count">
+                    <span class="material-symbols-outlined">bookmark</span>
+                    ${videoCount} videos
+                </span>
 
-                    <span class="family">
-                        <span class="material-symbols-outlined">hard_drive</span>
-                        ${family}
-                    </span>
+                <span class="family">
+                    <span class="material-symbols-outlined">hard_drive</span>
+                    ${family}
+                </span>
 
-                    <span class="playlist-id">
-                        <span class="material-symbols-outlined">content_copy</span>
-                        copy id
-                    </span>
-                </div>
+                <span class="playlist-id">
+                    <span class="material-symbols-outlined">content_copy</span>
+                    copy id
+                </span>
             </div>
         </div>
         `;

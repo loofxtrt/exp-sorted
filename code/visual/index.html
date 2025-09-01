@@ -10,44 +10,44 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,200,0,0" rel="stylesheet">
 </head>
 <body>
-    <div id="main-container">
-        <!--
-        <div id="file-tree">
-            <ul id="tree-root">
-                <li class="file">
-                    <span class="material-symbols-outlined">video_library</span>
-                    file
-                </li>
-
-                <ul class="folder">
-                    <span class="material-symbols-outlined">folder</span>
-                    folder
-                    
-                    <li class="file">
-                        <span class="material-symbols-outlined">video_library</span>
-                        file
-                    </li>
-                    
-                    <ul class="folder">
-                        <span class="material-symbols-outlined">folder</span>
-                        folder
-
-                        <li class="file">
-                            <span class="material-symbols-outlined">video_library</span>
-                            file
-                        </li>
-                    </ul>
-                </ul>
-            </ul>
-        </div>
-        -->
-
+    <div id="dashboard-container">
         <main>
+            <div id="actions">
+                <div class="button-group">
+                    <button id="create-new-playlist">
+                        <span class="material-symbols-outlined">add_2</span>
+                        Create new playlist
+                    </button>
+
+                    <button id="delete-playlist">
+                        <span class="material-symbols-outlined">delete</span>
+                        Delete
+                    </button>
+
+                    <button id="edit-playlist">
+                        <span class="material-symbols-outlined">edit</span>
+                        Edit
+                    </button>
+
+                    <button id="add-playlist-to-folder">
+                        <span class="material-symbols-outlined">folder_open</span>
+                        Add playlist to folder
+                    </button>
+                </div>
+
+                <div class="button-group">
+                    <button id="add-video-to-playlist">
+                        <span class="material-symbols-outlined">bookmark</span>
+                        Add video to playlist
+                    </button>
+                </div>
+            </div>
+
             <div id="content-view">
                 <label for="content-list" id="content-label">Folder name</label>
                 <ul id="content-list">
                     <!--
-                    <div class="playlist-row">
+                    <li class="playlist-row">
                         <input type="checkbox" name="select-playlist" id="select-playlist">
                         
                         <img src="../../assets/thumbnail-placeholder.svg" alt="thumbnail" class="thumbnail">
@@ -57,14 +57,9 @@
                             <p class="description">Lorem Ipsum</p>
                             <p class="type">Local</p>
                         </div>
-                    </div>
+                    </li>
                     -->
                 </ul>
-            </div>
-
-            <div class="actions">
-                <button id="add-new-playlist">Create playlist</button>
-                <button id="delete-playlist">Delete playlist</button>
             </div>
         </main>
     </div>

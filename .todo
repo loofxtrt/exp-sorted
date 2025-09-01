@@ -1,4 +1,14 @@
+- soap* sorted api
+
+
+
+- create playlist
 - delete playlist
-- reference playlist
-- clone playlist
-- soap sorted api
+- edit playlist
+- duplicate playlist
+- add playlist to folder
+
+- add video to playlist
+- remove video from playlist
+
+- copy id
