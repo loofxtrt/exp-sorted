@@ -4,8 +4,8 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "ele": "electron ./code/dist/electron/main.js",
-    "dev": "node ./code/dist/headless.js"
+    "ele": "npx tsc && sass ./code/visual/sass/style.scss ./code/visual/style.css && electron ./code/dist/electron/main.js",
+    "cli": "node ./code/dist/headless.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,7 @@
     "chalk": "^5.6.0",
     "electron": "^37.4.0",
     "js-yaml": "^4.1.0",
+    "sass": "^1.92.0",
     "typescript": "^5.9.2"
   }
 }

@@ -12,39 +12,42 @@
 <body>
     <div id="dashboard-container">
         <main>
-            <div id="actions">
-                <div class="button-group">
+            <div id="actions-header">
+                <div class="actions-group">
                     <button id="create-new-playlist">
                         <span class="material-symbols-outlined">add_2</span>
-                        Create new playlist
+                        <span class="button-text">Create new playlist</span>
                     </button>
 
                     <button id="delete-playlist">
                         <span class="material-symbols-outlined">delete</span>
-                        Delete
+                        <span class="button-text">Delete</span>
                     </button>
 
                     <button id="edit-playlist">
                         <span class="material-symbols-outlined">edit</span>
-                        Edit
+                        <span class="button-text">Edit</span>
                     </button>
 
                     <button id="add-playlist-to-folder">
                         <span class="material-symbols-outlined">folder_open</span>
-                        Add playlist to folder
+                        <span class="button-text">Add playlist to folder</span>
                     </button>
                 </div>
 
-                <div class="button-group">
+                <div class="actions-group">
+                    <input type="text" name="video-url" id="video-url" placeholder="https://www.youtube.com/watch?v=xxxxxxxxxxx">
+
                     <button id="add-video-to-playlist">
                         <span class="material-symbols-outlined">bookmark</span>
-                        Add video to playlist
+                        <span class="button-text">Add video to playlist</span>
                     </button>
                 </div>
             </div>
 
             <div id="content-view">
-                <label for="content-list" id="content-label">Folder name</label>
+                <input type="text" name="current-path" id="current-path">
+
                 <ul id="content-list">
                     <!--
                     <li class="playlist-row">

@@ -1,16 +1,33 @@
 import { PlaylistDataObject } from "../data.js";
 
+function clearContentList(contentListElement: Element) {
+    const children = document.querySelectorAll(`#${contentListElement.id}>*`);
+    children.forEach(child => {
+        contentListElement.removeChild(child);
+    });
+}
+
 function loadDirectoryView(directory: string) {
     const contentUl = document.querySelector('ul#content-list');
-    const contentLabel = document.querySelector('label#content-label');
-
-    // exibir o nome da pasta
-    if (contentLabel) {
-        contentLabel.innerHTML = '@playlists';
+    if (!contentUl) {
+        console.error('Error while fetching content list')
+        return;
     }
 
     // listar o id de todas as playlists obtidas via api
-    const playlistIds = window.soapi.CALL_listLocalPlaylistsIds(directory);
+    let playlistIds: string[] | null = null;
+    
+    try {
+        playlistIds = window.soapi.CALL_listLocalPlaylistsIds(directory);
+    } catch (err) {
+        console.error(err);
+    }
+
+    if (!playlistIds) {
+        console.error('Error while loading directory');
+        clearContentList(contentUl);
+        return;
+    }
 
     playlistIds.forEach(plId => {
         // obter os outros valores da playlist atual com base no id dela
@@ -62,6 +79,19 @@ function loadDirectoryView(directory: string) {
 }
 
 window.onload = () => {
+    // carregar o diretório inicial onde ficam todas as playlists
     const playlistDirectory = window.soapi.CONFIG_DIR_YT_PLAYLISTS
     loadDirectoryView(playlistDirectory);
+
+    // exibir o nome da pasta
+    const currentPathInput = document.querySelector('#current-path') as HTMLInputElement;
+
+    if (currentPathInput) {
+        currentPathInput.value = playlistDirectory;
+    }
+
+    // escutar novos inputs do usuário mudando de diretório
+    currentPathInput.addEventListener('change', () => {
+        loadDirectoryView(currentPathInput.value);
+    });
 };

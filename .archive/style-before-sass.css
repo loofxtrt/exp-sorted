@@ -1,0 +1,105 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+/* google icons */
+.material-symbols-outlined {
+    vertical-align: middle;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+body {
+    margin: 10px;
+}
+
+button {
+    padding: 2px 15px;
+}
+
+ul {
+    list-style: none;
+}
+
+ul > li {
+    margin: 10px 0;
+}
+
+.trivial-text {
+    color: gray;
+}
+
+#dashboard-container {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.playlist-row {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px; /* espaço entre a checkbox e o conteúdo */
+
+    border: 1px solid gray;
+    padding: 10px;
+    border-radius: 2px;
+
+    height: 100px;
+    align-items: center;
+}
+
+.playlist-row .thumbnail {
+    width: 100px;
+    height: min-content;
+}
+
+.thumbnail {
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
+#actions {
+    position: sticky;
+    top: 10px;
+
+    /* espaço entre um grupo de botões */
+    display: flex;
+    flex-direction: row;
+    gap: 50px;
+
+    background-color: rgb(206, 206, 206);
+    border: 1px solid gray;
+    border-radius: 2px;
+    padding: 5px;
+}
+
+#actions .button-group {
+    /* espaço entre os botões dentro de um grupo */
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+#actions .material-symbols-outlined {
+    font-size: 18px;
+}
+
+#current-path {
+    border: 1px solid gray;
+    border-radius: 2px;
+    padding: 5px;
+    width: 100%;
+}

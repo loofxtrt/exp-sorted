@@ -1,0 +1,121 @@
+$color-sec: gray;
+$common-border: 1px solid $color-sec;
+$common-border-radius: 2px;
+$common-gap: 10px;
+$common-margin: 10px;
+$common-padding: 10px;
+$small-padding: 5px;
+$small-gap: 5px;
+$large-gap: 25px;
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    font-size: 14px;
+}
+
+/* google icons */
+.material-symbols-outlined {
+    vertical-align: middle;
+    font-variation-settings:
+    'FILL' 0,
+    'wght' 200,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+body {
+    margin: $common-margin;
+}
+
+button {
+    padding: 2px 10px;
+}
+
+ul {
+    list-style: none;
+    
+    li {
+        margin: $common-margin 0;
+    }
+}
+
+.trivial-text {
+    color: $color-sec;
+}
+
+#dashboard-container {
+    display: flex;
+    flex-direction: row;
+    gap: $common-gap;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    gap: $common-gap;
+    width: 100%;
+}
+
+.playlist-row {
+    display: flex;
+    flex-direction: row;
+    column-gap: $common-gap; /* espaço entre a checkbox e o conteúdo */
+
+    border: $common-border;
+    padding: $common-padding;
+    border-radius: $common-border-radius;
+
+    height: 100px;
+    align-items: center;
+
+    .thumbnail {
+        width: 100px;
+        height: min-content;
+        border: $common-border;
+        border-radius: $common-border-radius;
+    }
+}
+
+#actions-header {
+    position: sticky;
+    top: 10px;
+
+    /* espaço entre um grupo de botões */
+    display: flex;
+    flex-direction: row;
+    gap: $large-gap;
+
+    background-color: rgb(206, 206, 206);
+    border: $common-border;
+    border-radius: $common-border-radius;
+    padding: $small-padding;
+
+    width: 100%;
+    max-height: 32px + $small-padding;
+
+    .actions-group {
+        /* espaço entre os botões dentro de um grupo */
+        display: flex;
+        flex-direction: row;
+        gap: $small-gap;
+    }
+
+    .material-symbols-outlined {
+        font-size: 18px;
+    }
+}
+
+#video-url {
+    width: 330px;
+    padding: $small-padding;
+}
+
+#current-path {
+    border: $common-border;
+    border-radius: $common-border-radius;
+    padding: $small-padding;
+    width: 100%;
+}
